@@ -1,10 +1,8 @@
 import json
-from pathlib import Path
 
-from src.config import Settings
+from src.config import get_settings
 
-pathtodevenv = Path(__file__).resolve().parent.parent / ".env.dev"
-settings = Settings(_env_file=pathtodevenv, _env_file_encoding="utf-8")  # type: ignore
+settings = get_settings()
 
 
 def main():

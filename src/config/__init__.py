@@ -1,3 +1,4 @@
+from functools import lru_cache
 from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -23,16 +24,10 @@ class Settings(BaseSettings):
     )
 
 
-# @lru_cache
-# def get_settings(env_file: Path | None = PATHTOENVS) -> Settings:
-#     """Get application settings.
+pathtodevenv = Path(__file__).resolve().parent.parent.parent / ".env.dev"
+settings = Settings(_env_file=pathtodevenv, _env_file_encoding="utf-8")  # type: ignore
 
-#     This function retrieves the application settings from the specified environment file.
 
-#     Args:
-#         env_file (Path | None, optional): The path to the environment file. Defaults to PATHTOENVS.
-
-#     Returns:
-#         Settings: The application settings.
-#     """
-#     return Settings(env_file=env_file, env_file_encoding="utf-8")  # type: ignore
+@lru_cache
+def get_settings() -> Settings:
+    return settings
