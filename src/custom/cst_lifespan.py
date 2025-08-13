@@ -7,7 +7,7 @@ data_service = DataService()
 
 
 @asynccontextmanager
-async def app_lifespan(app):  # noqa: ANN001, RUF029
+async def app_lifespan(app):  # noqa: ANN001, D103, RUF029
     try:
         data_service.start()
     except Exception as e:
