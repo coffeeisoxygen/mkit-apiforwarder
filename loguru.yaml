@@ -1,0 +1,20 @@
+handlers:
+  - sink: ext://sys.stdout
+    level: DEBUG
+    enqueue: true
+    colorize: true
+
+  - sink: logs/application.log
+    level: INFO
+    format: "<level>{level}</level>:<cyan>{message}</cyan> | {extra}"
+    serialize: true
+    retention: 7 days
+    compression: zip
+    diagnose: false
+    backtrace: true
+    enqueue: true
+extra:
+  default: "mkit-version-1"
+activation:
+  - ["my_module.secret", false]
+  - ["another_library.module", true]
