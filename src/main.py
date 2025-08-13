@@ -12,8 +12,7 @@ app.add_middleware(LoggingMiddleware, mask_fields=["password", "token", "secret"
 @app.get("/")
 async def root():
     return {
-        "message": "Hello, FastAPI entry point is running.",
-        "env": settings.app_env,
+        "message": "Welcome to the Otomax API Forwarder",
     }
 
 
