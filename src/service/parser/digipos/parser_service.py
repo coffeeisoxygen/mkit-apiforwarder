@@ -3,7 +3,7 @@
 Clean API for FastAPI integration.
 """
 
-from mlogg.utils import timeit
+from src.mlogg.utils import timeit
 from src.service.parser.digipos.factory_parser import ProcessorFactory
 
 

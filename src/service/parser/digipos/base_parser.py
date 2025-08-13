@@ -9,8 +9,8 @@ import re
 from abc import ABC, abstractmethod
 from typing import Any
 
-from mlogg import logger
-from mlogg.utils import timeit
+from src.mlogg import logger
+from src.mlogg.utils import timeit
 
 # Character limit constant
 MAX_CHAR_LIMIT = 7000

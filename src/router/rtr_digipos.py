@@ -11,6 +11,7 @@ from src.dependencies.dep_data import (
     DepModuleRepo,
 )
 from src.domain.transaction.sch_transaction import DigiposTrxModel
+from src.service.parser.digipos.parser_service import process_category_response
 from src.service.srv_querybuilder import DigiposQueryBuilder
 
 router = APIRouter()
@@ -65,15 +66,18 @@ async def digipos_trx(
             resp = await client.get(result["url"], params=result["params"])
         else:  # POST / PUT bisa ditambah disini
             resp = await client.post(result["url"], json=result["params"])
+    # Get category from query params (result["params"]) for parser
+    category = result["params"].get("category")
+    parsed = None
+    if category:
+        parsed = process_category_response(category, resp.text)
     return {
         "message": "Product, module, and member are valid and active for provider digipos",
-        # "product": product_obj.model_dump(),
-        # "module": module_obj.model_dump(),
-        # "member": member_obj.model_dump(),
         "query": result,
         "response": {
             "status_code": resp.status_code,
             "headers": dict(resp.headers),
             "body": resp.json(),
+            "parsed": parsed,
         },
     }
