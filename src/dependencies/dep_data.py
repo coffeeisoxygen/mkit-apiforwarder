@@ -5,6 +5,7 @@ from fastapi import Depends, HTTPException, Request
 from src.domain.member.rep_member import MemberRepository
 from src.domain.module.rep_module import ModuleRepository
 from src.service.srv_dtoservice import DataService
+from src.service.srv_memberauth import MemberAuthService
 
 
 # dependency buat ngambil data_service
@@ -68,4 +69,15 @@ def get_module_repo(data_service: DataService = Depends(get_data_service)):
 DepModuleRepo = Annotated[
     ModuleRepository,
     Depends(get_module_repo),
+]
+
+
+def get_member_auth_service(member_repo: DepMemberRepo = Depends()):
+    """Dependency untuk MemberAuthService."""
+    return MemberAuthService(member_repo)
+
+
+DepMemberAuthService = Annotated[
+    MemberAuthService,
+    Depends(get_member_auth_service),
 ]

@@ -46,3 +46,24 @@ class ValidationError(AppExceptionError):
 class FileLoaderError(AppExceptionError):
     default_message = "Failed to load file."
     status_code = 400
+
+
+# member transactions exceptions
+class MemberAuthError(AppExceptionError):
+    default_message = "Member authentication failed."
+    status_code = 401
+
+
+class MemberInvalidCredentialsError(AppExceptionError):
+    default_message = "Invalid member credentials."
+    status_code = 403
+
+
+class MemberInvalidSignatureError(AppExceptionError):
+    default_message = "Invalid member signature."
+    status_code = 403
+
+
+class MemberNotFoundError(AppExceptionError):
+    default_message = "Member not found."
+    status_code = 404
