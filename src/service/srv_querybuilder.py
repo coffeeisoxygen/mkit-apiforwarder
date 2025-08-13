@@ -42,7 +42,9 @@ class DigiposQueryBuilder:
 
         def process_params(param_dict):
             for k, v in param_dict.items():
-                params[k] = self._map_param(v, module, trx)
+                mapped = self._map_param(v, module, trx)
+                if mapped is not None:
+                    params[k] = mapped
 
         if product:
             if hasattr(product, "required_params") and product.required_params:
