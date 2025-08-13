@@ -188,6 +188,7 @@ python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
 pythonpath = ["src"]
+# ini addopts -v is verbose , while -q is quiet
 addopts = [
     "--import-mode=importlib",
     "-v",

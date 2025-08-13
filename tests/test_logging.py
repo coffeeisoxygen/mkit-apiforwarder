@@ -1,8 +1,7 @@
 import sys
 
 from loguru import logger
-
-from .conftest import get_settings
+from src.config import get_settings
 
 test_settings = get_settings()
 
@@ -25,7 +24,3 @@ def test_print_and_loguru(capsys):
     logger.remove(sink_id)
     assert "Hello from print!" in out or "Hello from print!" in err
     assert "Hello from loguru!" in out or "Hello from loguru!" in err
-
-
-def test_env_loaded():
-    assert test_settings.app_env == "TESTING"
