@@ -1,15 +1,22 @@
-"""test print settings to terminal and log."""
-
-import logging
+import sys
 
 from loguru import logger
-from pytest import LogCaptureFixture
-from src.config import PATHTOENVS
 
 
-def test_logging_settings(caplog: LogCaptureFixture):
-    """Test logging settings."""
-    with caplog.at_level(logging.INFO):
-        logger.info("Test log message")
-        print(f"Using settings from: {PATHTOENVS}")
-    assert "Test log message" in caplog.text
+def test_log_print(capsys):
+    # Add a temporary sink to stderr so capsys can capture loguru output
+    sink_id = logger.add(sys.stderr, format="{message}", level="INFO")
+    logger.info("Hello from loguru!")
+    out, err = capsys.readouterr()
+    logger.remove(sink_id)
+    assert "Hello from loguru!" in out or "Hello from loguru!" in err
+
+
+def test_print_and_loguru(capsys):
+    print("Hello from print!")
+    sink_id = logger.add(sys.stderr, format="{message}", level="INFO")
+    logger.info("Hello from loguru!")
+    out, err = capsys.readouterr()
+    logger.remove(sink_id)
+    assert "Hello from print!" in out or "Hello from print!" in err
+    assert "Hello from loguru!" in out or "Hello from loguru!" in err

@@ -1,11 +1,13 @@
 """project environments configurations."""
 
+import os
 from functools import lru_cache
 from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-PATHTOENVS = Path(__file__).resolve().parent.parent.parent / ".env"
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+DEFAULT_ENV_FILE = BASE_DIR / ".env"
 
 
 class Settings(BaseSettings):
@@ -14,18 +16,24 @@ class Settings(BaseSettings):
     app_name: str
 
     model_config = SettingsConfigDict(
-        env_file=PATHTOENVS,
+        env_file=DEFAULT_ENV_FILE,
         env_file_encoding="utf-8",
         extra="ignore",
         case_sensitive=False,
     )
 
 
-pathtodevenv = Path(__file__).resolve().parent.parent.parent / ".env.dev"
-settings = Settings(_env_file=pathtodevenv, _env_file_encoding="utf-8")  # type: ignore
-
-
 @lru_cache
-def get_settings() -> Settings:
-    """Get settings with cache."""
-    return settings
+def get_settings(_env_file: str | Path | None = None) -> Settings:
+    """Prioritas:.
+
+    1. Argumen _env_file
+    2. ENV_FILE dari environment variable
+    3. DEFAULT_ENV_FILE (.env)
+    """
+    env_file = _env_file or os.getenv("ENV_FILE", DEFAULT_ENV_FILE)
+    return Settings(_env_file=env_file, _env_file_encoding="utf-8")  # type: ignore
+
+
+# default instance
+settings = get_settings()
