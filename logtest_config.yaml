@@ -1,7 +1,7 @@
 handlers:
   - sink: ext://sys.stdout
     level: DEBUG
-    format: "<level>{level}</level>    | <cyan>{message}</cyan> | {extra}"
+    format: "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level}</level> | <cyan>{name}</cyan> | <magenta>{file}:{line}</magenta> | <yellow>{function}</yellow> | <cyan>{message}</cyan> | {extra}"
     enqueue: true
     colorize: true
 # add more sink here if needed

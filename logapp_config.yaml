@@ -1,0 +1,12 @@
+handlers:
+  - sink: ext://sys.stdout
+    level: DEBUG
+    format: "<level>{level}</level>:<cyan>{message}</cyan> | {extra}"
+    enqueue: true
+    colorize: true
+# add more sink here if needed
+extra:
+  default: "mkit-version-1"
+activation:
+  - ["my_module.secret", false]
+  - ["another_library.module", true]
