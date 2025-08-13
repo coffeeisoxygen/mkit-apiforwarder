@@ -12,7 +12,7 @@ from pathlib import Path
 
 from src.domain.member.sch_member import MemberInDB
 from src.mlogg import logger
-from src.service.srv_dtoloader import GenericYamlLoader
+from src.service.dto.srv_dtoloader import GenericYamlLoader
 
 
 class MemberRepository:

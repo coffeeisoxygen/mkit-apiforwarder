@@ -7,7 +7,7 @@ from src.domain.module.rep_module import ModuleRepository
 from src.service.auth.srv_dgproductauth import DigiposProductAuthService
 from src.service.auth.srv_memberauth import MemberAuthService
 from src.service.auth.srv_moduleauth import ModuleAuthService
-from src.service.srv_dtoservice import DataService, DigiposProductRepository
+from src.service.dto.srv_dtoservice import DataService, DigiposProductRepository
 
 
 # -------------------------------

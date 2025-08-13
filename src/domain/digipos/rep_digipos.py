@@ -2,7 +2,7 @@ from pathlib import Path
 
 from src.domain.digipos.sch_digipos import DGProductInDB  # pastikan model ini ada
 from src.mlogg import logger
-from src.service.srv_dtoloader import GenericYamlLoader
+from src.service.dto.srv_dtoloader import GenericYamlLoader
 
 
 class DigiposProductRepository:
