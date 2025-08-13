@@ -54,7 +54,7 @@ class FileLoaderError(AppExceptionError):
 # =========================
 # FastAPI Exception Handler
 # =========================
-async def register_exception_handlers(app):
+def register_exception_handlers(app):
     @app.exception_handler(AppExceptionError)
     async def app_exception_handler(request: Request, exc: AppExceptionError):
         logger.exception(f"Exception occurred: {exc}")

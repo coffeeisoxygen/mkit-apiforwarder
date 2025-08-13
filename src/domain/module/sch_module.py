@@ -11,9 +11,9 @@ class ModuleInDB(ModuleConfig):
     moduleid: str
     name: str
     username: str
-    msisdn: str
-    pin: str
-    password: str
+    msisdn: str | int
+    pin: str | int
+    password: str | int
     email: EmailStr
     is_active: bool
     base_url: str
