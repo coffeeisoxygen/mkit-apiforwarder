@@ -1,14 +1,16 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Depends, Query
 
 from src.dependencies.dep_data import (
     DepDigiposRepo,
     DepDigiProductAuthService,
     DepMemberAuthService,
     DepModuleAuthService,
+    DepModuleRepo,
 )
 from src.domain.transaction.sch_transaction import DigiposTrxModel
+from src.service.srv_querybuilder import DigiposQueryBuilder
 
 router = APIRouter()
 
@@ -33,12 +35,20 @@ def is_digipos_product_active(product_id: str, digipos_repo: DepDigiposRepo):
     return {"productid": product_id, "is_active": is_active}
 
 
+def get_digipos_query_builder(
+    product_repo: DepDigiposRepo,
+    module_repo: DepModuleRepo,
+) -> DigiposQueryBuilder:
+    return DigiposQueryBuilder(product_repo, module_repo)
+
+
 @router.get("/digipos/trx")
 def digipos_trx(
     trx_query: Annotated[DigiposTrxModel, Query()],
     product_auth_service: DepDigiProductAuthService,
     module_auth_service: DepModuleAuthService,
     member_auth_service: DepMemberAuthService,
+    query_builder: DigiposQueryBuilder = Depends(get_digipos_query_builder),
 ):
     member_obj = member_auth_service.authenticate_and_verify(trx_query)
     product_obj = product_auth_service.authenticate_and_check(
@@ -47,9 +57,11 @@ def digipos_trx(
     module_obj = module_auth_service.authenticate_and_check_provider(
         trx_query.moduleid, "digipos"
     )
+    result = query_builder.build(trx_query)
     return {
         "message": "Product, module, and member are valid and active for provider digipos",
         "product": product_obj.model_dump(),
         "module": module_obj.model_dump(),
         "member": member_obj.model_dump(),
+        "query": result,
     }
