@@ -37,6 +37,11 @@ def is_digipos_product_active(product_id: str, digipos_repo: DepDigiposRepo):
     return {"productid": product_id, "is_active": is_active}
 
 
+@router.get("/digipos/buy")
+async def digipos_buy():
+    pass
+
+
 def get_digipos_query_builder(
     product_repo: DepDigiposRepo,
     module_repo: DepModuleRepo,
