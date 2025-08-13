@@ -1,19 +1,16 @@
-import json
+import uvicorn
+from fastapi import FastAPI
 
-from src.config import get_settings
+from src.utils.mlogger import init_custom_logging
 
-settings = get_settings()
+app = FastAPI()
+init_custom_logging()
 
 
-def main():
-    print(
-        json.dumps({
-            "app_env": settings.app_env,
-            "app_debug": settings.app_debug,
-            "app_name": settings.app_name,
-        })
-    )
+@app.get("/")
+async def root():
+    return {"message": "Hello, FastAPI entry point is running."}
 
 
 if __name__ == "__main__":
-    main()
+    uvicorn.run(app, host="0.0.0.0", port=8000)

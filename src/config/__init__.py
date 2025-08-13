@@ -1,14 +1,11 @@
+"""project environments configurations."""
+
 from functools import lru_cache
 from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 PATHTOENVS = Path(__file__).resolve().parent.parent.parent / ".env"
-# LISTENVS = (
-#     # str(PATHTOENVS / ".env.dev"),  # first Load
-#     # str(PATHTOENVS / ".env.test"),  # second Load
-#     # str(PATHTOENVS / ".env"),  # third Load
-# )
 
 
 class Settings(BaseSettings):
@@ -30,4 +27,5 @@ settings = Settings(_env_file=pathtodevenv, _env_file_encoding="utf-8")  # type:
 
 @lru_cache
 def get_settings() -> Settings:
+    """Get settings with cache."""
     return settings
