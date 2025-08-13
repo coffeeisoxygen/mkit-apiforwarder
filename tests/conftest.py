@@ -31,4 +31,5 @@ def override_settings():
     """
     get_settings.cache_clear()
     get_settings(_env_file=str(PATHTOTESTENV))
-    get_settings(_env_file=str(PATHTOTESTENV))
+
+    return get_settings()
