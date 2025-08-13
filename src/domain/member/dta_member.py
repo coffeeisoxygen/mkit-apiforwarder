@@ -12,6 +12,7 @@ import yaml
 from pydantic import ValidationError
 
 from mlogg import logger
+from src.custom.cst_exceptions import FileLoaderError
 from src.domain.member.sch_member import MemberInDB
 
 
@@ -63,7 +64,7 @@ def load_and_validate_yaml(yaml_path: Path) -> list[MemberInDB]:
                 data: Any = yaml.safe_load(f)
         except yaml.YAMLError as e:
             logger.error("Failed to parse YAML file", error=str(e))
-            raise ValueError(f"Failed to parse YAML file: {e}") from e
+            raise FileLoaderError("Failed to parse YAML file") from e
 
         # Validate structure
         if not isinstance(data, dict) or "members" not in data:
