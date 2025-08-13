@@ -1,7 +1,7 @@
 import sys
 
-from loguru import logger
 from src.config import get_settings
+from src.mlogg import logger
 
 test_settings = get_settings()
 

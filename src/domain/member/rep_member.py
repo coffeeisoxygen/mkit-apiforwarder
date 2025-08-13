@@ -10,9 +10,9 @@ Repository pattern for member data management:
 
 from pathlib import Path
 
-from mlogg import logger
 from src.domain.member.dta_member import load_and_validate_yaml
 from src.domain.member.sch_member import MemberInDB
+from src.mlogg import logger
 
 
 class MemberRepository:

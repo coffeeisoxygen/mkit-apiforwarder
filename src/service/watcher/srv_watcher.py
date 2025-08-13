@@ -3,9 +3,10 @@ import threading
 from collections.abc import Callable
 from typing import Any
 
-from loguru import logger
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
+
+from src.mlogg import logger
 
 
 def ensure_str_path(path: pathlib.Path | str | bytes) -> str:

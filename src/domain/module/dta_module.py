@@ -11,9 +11,9 @@ from typing import Any
 import yaml
 from pydantic import ValidationError
 
-from mlogg import logger
 from src.custom.cst_exceptions import FileLoaderError
 from src.domain.module.sch_module import ModuleInDB
+from src.mlogg import logger
 
 
 def check_duplicate_moduleids(modules_data: list[dict]) -> list[str]:
@@ -83,13 +83,26 @@ def load_and_validate_yaml(yaml_path: Path) -> list[ModuleInDB]:
         # Validate each module with Pydantic
         validated_modules: list[ModuleInDB] = []
         for i, item in enumerate(modules_list):
+            moduleid = item.get("moduleid", "<unknown>")
             try:
-                validated_modules.append(ModuleInDB(**item))
+                validated_module = ModuleInDB(**item)
+                validated_modules.append(validated_module)
+                logger.info(
+                    "Module validation succeeded",
+                    index=i,
+                    moduleid=moduleid,
+                )
             except ValidationError as e:
                 logger.error(
-                    "Module validation failed", index=i, item=item, error=str(e)
+                    "Module validation failed",
+                    index=i,
+                    moduleid=moduleid,
+                    item=item,
+                    error=str(e),
                 )
-                raise ValueError(f"Module validation failed at index {i}: {e}") from e
+                raise ValueError(
+                    f"Module validation failed at index {i} (moduleid={moduleid}): {e}"
+                ) from e
 
         if not validated_modules:
             logger.warning("No valid modules found in YAML file")

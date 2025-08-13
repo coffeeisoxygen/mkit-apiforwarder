@@ -2,8 +2,8 @@ from pathlib import Path
 
 import pytest
 from dotenv import load_dotenv
-from loguru import logger
 from src.config import get_settings
+from src.mlogg import logger
 
 PATHTOTESTENV = Path(__file__).parent.parent / ".env.test"
 

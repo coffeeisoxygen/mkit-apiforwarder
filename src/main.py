@@ -1,13 +1,14 @@
-import asyncio
-
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 
 from src.custom import LoggingMiddleware
-from src.custom.cst_exceptions import register_exception_handlers
+from src.custom.cst_exceptions import AppExceptionError
 from src.custom.cst_lifespan import app_lifespan  # lifespan pakai DataService
+from src.mlogg import init_logging, logger
 from src.router import register_routes
 
+init_logging()
 app = FastAPI(lifespan=app_lifespan)
 
 # Mask sensitive fields di logs
@@ -15,7 +16,20 @@ app.add_middleware(LoggingMiddleware, mask_fields=["password", "token", "secret"
 
 register_routes(app)
 
-asyncio.run(register_exception_handlers(app))
+
+# Register exception handlers
+async def register_exception_handlers(app):
+    @app.exception_handler(AppExceptionError)
+    async def app_exception_handler(request: Request, exc: AppExceptionError):
+        logger.exception(f"Exception occurred: {exc}")
+        return JSONResponse(
+            status_code=exc.status_code,
+            content={
+                "error": exc.name,
+                "message": exc.message,
+                "context": exc.context,
+            },
+        )
 
 
 # Root endpoint

@@ -3,8 +3,9 @@ import time
 import uuid
 
 from fastapi import Request
-from loguru import logger
 from starlette.middleware.base import BaseHTTPMiddleware
+
+from src.mlogg import logger
 
 
 def mask_body_fields(body_data: dict, mask_fields: list[str]) -> dict:

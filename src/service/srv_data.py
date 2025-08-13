@@ -1,10 +1,10 @@
 from pathlib import Path
 from typing import Any
 
-from config import get_settings
-from mlogg import logger
+from src.config import get_settings
 from src.domain.member.rep_member import MemberRepository
 from src.domain.module.rep_module import ModuleRepository
+from src.mlogg import logger
 from src.service.watcher.srv_watcher import FileWatcher
 
 

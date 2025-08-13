@@ -1,9 +1,9 @@
 # src/exception/exceptions.py
 from fastapi import Request
 from fastapi.responses import JSONResponse
-from loguru import logger
 
-from config import get_settings
+from src.config import get_settings
+from src.mlogg import logger
 
 APP_NAME = get_settings().app_name
 
