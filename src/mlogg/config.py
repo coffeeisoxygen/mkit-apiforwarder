@@ -8,6 +8,16 @@ from loguru_config import LoguruConfig
 
 CONFIG_PATH = Path(__file__).parent.parent.parent / "loguru.yaml"
 
+UVICORN_LOGGERS = (
+    "uvicorn",
+    "uvicorn.error",
+    "uvicorn.access",
+    "uvicorn.asgi",
+    "uvicorn.warning",
+    "uvicorn.server",
+    "uvicorn.info",
+)
+
 
 def normalize_level(level: str) -> str:
     """Normalize the logging level string."""
@@ -15,13 +25,14 @@ def normalize_level(level: str) -> str:
 
 
 class InterceptHandler(logging.Handler):
-    """Intercept standard logging and forward to loguru with correct format."""
+    """Intercept standard logging and forward to loguru."""
 
     def emit(self, record: logging.LogRecord) -> None:
         try:
             level = logger.level(record.levelname).name
         except ValueError:
             level = record.levelno
+
         frame, depth = inspect.currentframe(), 0
         while frame:
             filename = frame.f_code.co_filename
@@ -31,10 +42,11 @@ class InterceptHandler(logging.Handler):
                 break
             frame = frame.f_back
             depth += 1
+
         msg = record.getMessage()
-        # Remove double INFO: for uvicorn.access logs
         if record.name == "uvicorn.access" and msg.startswith("INFO:"):
             msg = msg[5:].lstrip()
+
         logger.opt(depth=depth, exception=record.exc_info).log(level, msg)
 
 
@@ -49,36 +61,44 @@ class StreamToLogger:
             logger.opt(depth=1).log(self._level, line.rstrip())
 
     def flush(self):
-        # No-op for compatibility
         pass
 
     def isatty(self):
         return False
 
 
-def init_logging():
+def init_logging(env: str | None = None):
     """Centralized logging setup for the whole app.
 
-    Loads loguru config from YAML before intercepting standard logging.
-    Ensures all logs (including intercepted) use the YAML format.
+    - Load loguru config from YAML
+    - Intercept std logging
+    - Redirect stdout/stderr
+    - Optionally patch `extra` with environment name
     """
     LoguruConfig.load(str(CONFIG_PATH))
+
+    # Intercept Python's std logging
     logging.basicConfig(handlers=[InterceptHandler()], level=0, force=True)
-    uvicorn_loggers = (
-        "uvicorn",
-        "uvicorn.error",
-        "uvicorn.access",
-        "uvicorn.asgi",
-        "uvicorn.warning",
-        "uvicorn.server",
-        "uvicorn.info",
-    )
-    for logger_name in uvicorn_loggers:
+
+    # Replace handlers for uvicorn loggers
+    for logger_name in UVICORN_LOGGERS:
         uvicorn_logger = logging.getLogger(logger_name)
         uvicorn_logger.handlers = [InterceptHandler()]
         uvicorn_logger.propagate = False
-    access_logger = logging.getLogger("uvicorn.access")
-    access_logger.setLevel(logging.INFO)
+
+    # Adjust uvicorn access log level
+    logging.getLogger("uvicorn.access").setLevel(logging.INFO)
+
+    # Redirect stdout/stderr to loguru
     sys.stdout = StreamToLogger("INFO")
     sys.stderr = StreamToLogger("ERROR")
+
+    # Optional patch for env
+    global logger
+    if env is not None:
+        logger = logger.patch(
+            lambda record: record["extra"].clear()
+            or record["extra"].update({"env": env})
+        )
+
     logger.debug("🔄 Centralized logging initialized")

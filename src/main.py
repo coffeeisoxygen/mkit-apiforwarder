@@ -2,17 +2,18 @@ import uvicorn
 from fastapi import FastAPI
 
 from src.config import DEVELOPMENT_ENV_FILE, get_settings
-from src.mlogg import init_custom_logging
-from src.mlogg.utils import logtrace_endpoint
+from src.config.cst_middleware import LoggingMiddleware
+from src.mlogg.config import init_logging
 
 settings = get_settings(_env_file=DEVELOPMENT_ENV_FILE)
-init_custom_logging()
+init_logging(settings.app_env)
+
 
 app = FastAPI()
+app.add_middleware(LoggingMiddleware, mask_fields=["password", "token", "secret"])
 
 
 @app.get("/")
-@logtrace_endpoint("root")
 async def root():
     return {
         "message": "Hello, FastAPI entry point is running.",
