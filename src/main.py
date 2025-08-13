@@ -2,7 +2,7 @@ import uvicorn
 from fastapi import FastAPI
 
 from src.config import DEVELOPMENT_ENV_FILE, get_settings
-from src.config.cst_middleware import LoggingMiddleware
+from src.custom.cst_middleware import LoggingMiddleware
 from src.mlogg.config import init_logging
 
 settings = get_settings(_env_file=DEVELOPMENT_ENV_FILE)
