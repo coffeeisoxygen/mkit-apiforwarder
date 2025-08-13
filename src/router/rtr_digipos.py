@@ -2,7 +2,11 @@
 
 from fastapi import APIRouter, Query
 
-from src.dependencies.dep_data import DepDigiposRepo, DepModuleAuthService
+from src.dependencies.dep_data import (
+    DepDigiposRepo,
+    DepDigiProductAuthService,
+    DepModuleAuthService,
+)
 
 router = APIRouter()
 
@@ -32,11 +36,16 @@ def is_digipos_product_active(product_id: str, digipos_repo: DepDigiposRepo):
 
 @router.get("/digipos/trx")
 def digipos_trx(
+    product_auth_service: DepDigiProductAuthService,
     module_auth_service: DepModuleAuthService,
+    productid: str = Query(..., description="Product ID"),
     moduleid: str = Query(..., description="Module ID"),
 ):
-    """Validate active module and Digipos provider."""
+    """Validate active Digipos product and module for provider digipos."""
+    product = product_auth_service.authenticate_and_check(productid, "digipos")
     module = module_auth_service.authenticate_and_check_provider(moduleid, "digipos")
     return {
-        "message": f"Module {module.moduleid} is valid and active for provider digipos"
+        "message": "Product and module are valid and active for provider digipos",
+        "product": product.model_dump(),
+        "module": module.model_dump(),
     }
