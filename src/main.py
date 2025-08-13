@@ -1,8 +1,11 @@
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 
 from src.custom import LoggingMiddleware
+from src.custom.cst_exceptions import AppExceptionError
 from src.custom.cst_lifespan import app_lifespan  # lifespan pakai DataService
+from src.mlogg import logger
 from src.router import register_routes
 
 app = FastAPI(lifespan=app_lifespan)
@@ -10,10 +13,22 @@ app = FastAPI(lifespan=app_lifespan)
 # Mask sensitive fields di logs
 app.add_middleware(LoggingMiddleware, mask_fields=["password", "token", "secret"])
 
+
 register_routes(app)
 
 
+# Global exception handler for custom exceptions
+@app.exception_handler(AppExceptionError)
+async def app_exception_handler(request: Request, exc: AppExceptionError):
+    logger.error(f"Application error: {exc.message}", extra=exc.context)
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"error": exc.message, "context": exc.context},
+    )
+
+
 # Root endpoint
+@logger.catch
 @app.get("/")
 async def root():
     """Root endpoint.

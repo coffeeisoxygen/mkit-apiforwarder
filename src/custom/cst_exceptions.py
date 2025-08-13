@@ -1,9 +1,6 @@
 # src/exception/exceptions.py
-from fastapi import Request
-from fastapi.responses import JSONResponse
 
 from src.config import get_settings
-from src.mlogg import logger
 
 APP_NAME = get_settings().app_name
 
@@ -49,20 +46,3 @@ class ValidationError(AppExceptionError):
 class FileLoaderError(AppExceptionError):
     default_message = "Failed to load file."
     status_code = 400
-
-
-# =========================
-# FastAPI Exception Handler
-# =========================
-def register_exception_handlers(app):
-    @app.exception_handler(AppExceptionError)
-    async def app_exception_handler(request: Request, exc: AppExceptionError):
-        logger.exception(f"Exception occurred: {exc}")
-        return JSONResponse(
-            status_code=exc.status_code,
-            content={
-                "error": exc.name,
-                "message": exc.message,
-                "context": exc.context,
-            },
-        )
