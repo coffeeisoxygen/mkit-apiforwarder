@@ -5,15 +5,15 @@ handlers:
     enqueue: true
     colorize: true
 
-  - sink: logs/application.log
-    level: INFO
-    format: "<level>{level}</level>:<cyan>{message}</cyan> | {extra}"
-    serialize: true
-    retention: 7 days
-    compression: zip
-    diagnose: false
-    backtrace: true
-    enqueue: true
+  # - sink: logs/application.log
+  #   level: INFO
+  #   format: "<level>{level}</level>:<cyan>{message}</cyan> | {extra}"
+  #   serialize: true
+  #   retention: 7 days
+  #   diagnose: false
+  #   backtrace: true
+  #   enqueue: true
+
 extra:
   default: {}
 activation:
