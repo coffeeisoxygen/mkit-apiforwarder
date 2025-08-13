@@ -18,6 +18,8 @@ class TrxBaseModel(BaseModel):
 
 class DigiposTrxModel(TrxBaseModel):
     moduleid: str
+    markup: str | int | None = 0
+    subproduct: str | None = None
 
 
 class IsimpleTrxModel(TrxBaseModel):
