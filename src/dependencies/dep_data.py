@@ -6,6 +6,7 @@ from src.domain.member.rep_member import MemberRepository
 from src.domain.module.rep_module import ModuleRepository
 from src.service.srv_dtoservice import DataService
 from src.service.srv_memberauth import MemberAuthService
+from src.service.srv_moduleauth import ModuleAuthService
 
 
 # -------------------------------
@@ -52,4 +53,6 @@ def get_member_auth_service(member_repo: DepMemberRepo) -> MemberAuthService:
     return MemberAuthService(member_repo)
 
 
-DepMemberAuthService = Annotated[MemberAuthService, Depends(get_member_auth_service)]
+# ModuleAuthService Dependency
+def get_module_auth_service(module_repo: DepModuleRepo) -> ModuleAuthService:
+    return ModuleAuthService(module_repo)
