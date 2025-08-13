@@ -66,14 +66,14 @@ class MemberAuthService:
 
     def _verify_signature(self, request: MemberTrxRequestModel, member_db: MemberInDB):
         """Verifikasi signature yang dikirim client (OtomaX format)."""
-        expected_data = dict(
-            memberid=request.memberid,
-            product=str(request.product or ""),
-            dest=str(request.dest or ""),
-            refid=str(request.refid or ""),
-            pin=member_db.pin.get_secret_value(),
-            password=member_db.password.get_secret_value(),
-        )
+        expected_data = {
+            "memberid": request.memberid,
+            "product": str(request.product or ""),
+            "dest": str(request.dest or ""),
+            "refid": str(request.refid or ""),
+            "pin": member_db.pin.get_secret_value(),
+            "password": member_db.password.get_secret_value(),
+        }
 
         logger.debug(f"Expected data: {expected_data}")
         logger.debug(f"Received signature: {request.sign}")
