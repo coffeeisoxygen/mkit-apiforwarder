@@ -1,7 +1,13 @@
 from pydantic import BaseModel, EmailStr
 
+# TODO Validasi FIELD
 
-class Module(BaseModel):
+
+class ModuleConfig(BaseModel):
+    model_config = {"from_attributes": True}
+
+
+class ModuleInDB(ModuleConfig):
     moduleid: str
     name: str
     username: str
@@ -17,5 +23,5 @@ class Module(BaseModel):
     provider: str
 
 
-class ModulesConfig(BaseModel):
-    modules: list[Module]
+class ModuleListInDB(BaseModel):
+    __root__: list[ModuleInDB]
