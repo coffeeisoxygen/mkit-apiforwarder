@@ -1,6 +1,5 @@
 from typing import Protocol, runtime_checkable
 
-from mlogg import logger
 from src.custom.cst_exceptions import (
     MemberAuthError,
     MemberInvalidCredentialsError,
@@ -8,6 +7,7 @@ from src.custom.cst_exceptions import (
     MemberNotFoundError,
 )
 from src.domain.member.sch_member import MemberInDB, MemberTrxRequestModel
+from src.mlogg import logger
 from src.service.srv_signature import OtomaxSignatureService
 
 
