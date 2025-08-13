@@ -1,7 +1,10 @@
+import asyncio
+
 import uvicorn
 from fastapi import FastAPI
 
 from src.custom import LoggingMiddleware
+from src.custom.cst_exceptions import register_exception_handlers
 from src.custom.cst_lifespan import app_lifespan  # lifespan pakai DataService
 from src.router import register_routes
 
@@ -11,6 +14,8 @@ app = FastAPI(lifespan=app_lifespan)
 app.add_middleware(LoggingMiddleware, mask_fields=["password", "token", "secret"])
 
 register_routes(app)
+
+asyncio.run(register_exception_handlers(app))
 
 
 # Root endpoint
