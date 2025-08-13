@@ -33,7 +33,7 @@ class MemberInDB(BaseModel):
     memberid: str = Field(
         ..., description="ID unik untuk member", min_length=5, pattern=r"^[a-zA-Z0-9]*$"
     )
-    name: str = Field(..., description="Nama member", max_length=100)
+    name: str = Field(..., description="Nama member", min_length=1, max_length=100)
     pin: SecretStr = Field(..., description="PIN untuk member", min_length=6)
     password: SecretStr = Field(..., description="Password untuk member", min_length=6)
     is_active: bool = Field(default=True, description="Status keaktifan member")
