@@ -162,6 +162,7 @@ omit = [
     "*/signature_bootstrap.py",
     "src/__init__.py",
     "src/_version.py",
+    "src/mlogg/*",
 ]
 
 [tool.coverage.report]
