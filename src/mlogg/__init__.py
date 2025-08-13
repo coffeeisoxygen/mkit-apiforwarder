@@ -26,6 +26,8 @@ class CustomLogger:
             "uvicorn.access",
             "uvicorn.asgi",
             "uvicorn.warning",
+            "uvicorn.server",
+            "uvicorn.info",
         )
         for logger_name in uvicorn_loggers:
             uvicorn_logger = logging.getLogger(logger_name)
