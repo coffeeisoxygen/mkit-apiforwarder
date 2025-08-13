@@ -8,7 +8,7 @@ from src.dependencies.dep_data import (
     DepMemberAuthService,
     DepModuleAuthService,
 )
-from src.domain.member.sch_member import MemberTrxRequestModel
+from src.domain.transaction.sch_transaction import DigiposTrxModel
 
 router = APIRouter()
 
@@ -35,18 +35,17 @@ def is_digipos_product_active(product_id: str, digipos_repo: DepDigiposRepo):
 
 @router.get("/digipos/trx")
 def digipos_trx(
-    member_query: Annotated[MemberTrxRequestModel, Query()],
+    trx_query: Annotated[DigiposTrxModel, Query()],
     product_auth_service: DepDigiProductAuthService,
     module_auth_service: DepModuleAuthService,
     member_auth_service: DepMemberAuthService,
 ):
-    """Validate active Digipos product, module, and member for provider digipos."""
-    member_obj = member_auth_service.authenticate_and_verify(member_query)
+    member_obj = member_auth_service.authenticate_and_verify(trx_query)
     product_obj = product_auth_service.authenticate_and_check(
-        member_query.product, "digipos"
+        trx_query.product, "digipos"
     )
     module_obj = module_auth_service.authenticate_and_check_provider(
-        getattr(member_query, "moduleid", None), "digipos"
+        trx_query.moduleid, "digipos"
     )
     return {
         "message": "Product, module, and member are valid and active for provider digipos",

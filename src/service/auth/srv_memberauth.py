@@ -6,7 +6,8 @@ from src.custom.cst_exceptions import (
     MemberInvalidSignatureError,
     MemberNotFoundError,
 )
-from src.domain.member.sch_member import MemberInDB, MemberTrxRequestModel
+from src.domain.member.sch_member import MemberInDB
+from src.domain.transaction.sch_transaction import TrxBaseModel
 from src.mlogg import logger
 from src.service.srv_signature import OtomaxSignatureService
 
@@ -23,7 +24,7 @@ class MemberAuthService:
         self.member_manager = member_manager
         self.otomax_sign_service = OtomaxSignatureService()
 
-    def authenticate_and_verify(self, request: MemberTrxRequestModel) -> MemberInDB:
+    def authenticate_and_verify(self, request: TrxBaseModel) -> MemberInDB:
         """Autentikasi member, cek status, dan validasi signature."""
         with logger.contextualize(memberid=request.memberid, op="auth_verify"):
             logger.info("Mulai autentikasi member")
@@ -47,9 +48,7 @@ class MemberAuthService:
             raise MemberAuthError("Member tidak aktif")
         return member
 
-    def _verify_without_signature(
-        self, request: MemberTrxRequestModel, member_db: MemberInDB
-    ):
+    def _verify_without_signature(self, request: TrxBaseModel, member_db: MemberInDB):
         """Otentikasi menggunakan PIN atau Password (jika diizinkan)."""
         if not member_db.allow_nosign:
             raise MemberInvalidSignatureError("Signature wajib untuk member ini")
@@ -64,7 +63,7 @@ class MemberAuthService:
         else:
             raise MemberInvalidCredentialsError("PIN atau Password tidak valid")
 
-    def _verify_signature(self, request: MemberTrxRequestModel, member_db: MemberInDB):
+    def _verify_signature(self, request: TrxBaseModel, member_db: MemberInDB):
         """Verifikasi signature yang dikirim client (OtomaX format)."""
         expected_data = {
             "memberid": request.memberid,
