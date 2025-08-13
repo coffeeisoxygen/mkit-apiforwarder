@@ -67,3 +67,18 @@ class MemberInvalidSignatureError(AppExceptionError):
 class MemberNotFoundError(AppExceptionError):
     default_message = "Member not found."
     status_code = 404
+
+
+class ModuleAuthError(AppExceptionError):
+    default_message = "Module authentication failed."
+    status_code = 401
+
+
+class ModuleNotFoundError(AppExceptionError):
+    default_message = "Module not found."
+    status_code = 404
+
+
+class ModuleInvalidCredentialsError(AppExceptionError):
+    default_message = "Invalid module credentials."
+    status_code = 403
