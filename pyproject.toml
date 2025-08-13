@@ -199,7 +199,8 @@ addopts = [
     "--cov-report=term-missing:skip-covered",
     "--html=.reports/tests/report.html",
     "--self-contained-html",
-    "--capture=no"
+    "--capture=no",
+    "--color=yes",
 ]
 asyncio_mode = "auto"
 
