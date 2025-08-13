@@ -67,8 +67,13 @@ async def digipos_trx(
             resp = await client.post(result["url"], json=result["params"])
     return {
         "message": "Product, module, and member are valid and active for provider digipos",
-        "product": product_obj.model_dump(),
-        "module": module_obj.model_dump(),
-        "member": member_obj.model_dump(),
+        # "product": product_obj.model_dump(),
+        # "module": module_obj.model_dump(),
+        # "member": member_obj.model_dump(),
         "query": result,
+        "response": {
+            "status_code": resp.status_code,
+            "headers": dict(resp.headers),
+            "body": resp.text,
+        },
     }
