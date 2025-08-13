@@ -4,7 +4,7 @@ import pytest
 from loguru import logger
 from src.config import get_settings
 
-PATHTOENVS = Path(__file__).resolve().parent.parent / ".env.test"
+PATHTOTESTENV = Path(__file__).resolve().parent.parent / ".env.test"
 
 
 @pytest.fixture(autouse=True)
@@ -30,5 +30,5 @@ def override_settings():
     Clear cache and load test environment settings once per test session.
     """
     get_settings.cache_clear()
-    get_settings(_env_file=str(PATHTOENVS))
-    get_settings(_env_file=str(PATHTOENVS))
+    get_settings(_env_file=str(PATHTOTESTENV))
+    get_settings(_env_file=str(PATHTOTESTENV))
