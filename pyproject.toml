@@ -165,6 +165,7 @@ omit = [
 ]
 
 [tool.coverage.report]
+fail_under = 80
 exclude_lines = [
     "pragma: no cover",
     "if __name__ == .__main__.:",
@@ -191,7 +192,7 @@ addopts = [
     "--import-mode=importlib",
     "-v",
     "--strict-markers",
-    "--tb=short",
+    "--tb=auto",
     "--no-header",
     "--disable-warnings",
     "--cov=src",
@@ -204,8 +205,8 @@ addopts = [
 ]
 asyncio_mode = "auto"
 
-log_cli = true
-log_cli_level = "DEBUG"
+log_cli = false
+log_cli_level = "INFO"
 log_cli_format = "%(asctime)s [%(levelname)8s] %(name)s: %(message)s"
 markers = [
     "slow: mark test as slow to run",
