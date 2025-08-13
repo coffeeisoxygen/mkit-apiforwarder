@@ -10,9 +10,9 @@ Repository pattern for member data management:
 
 from pathlib import Path
 
-from src.domain.member.dta_member import load_and_validate_yaml
 from src.domain.member.sch_member import MemberInDB
 from src.mlogg import logger
+from src.service.data_loader import GenericYamlLoader
 
 
 class MemberRepository:
@@ -28,6 +28,7 @@ class MemberRepository:
             file_path = Path("data/members.yaml")
 
         self.file_path = Path(file_path)
+        self.loader = GenericYamlLoader("members", "memberid", MemberInDB, logger)
         self._members: list[MemberInDB] = []
         self._members_dict: dict[str, MemberInDB] = {}
 
@@ -35,7 +36,7 @@ class MemberRepository:
         self.reload()
 
     def _load_data_from_file(self) -> list[MemberInDB]:
-        """Load data by delegating to pure function in srv_memberdata.
+        """Load data using GenericYamlLoader.
 
         Returns:
             List of validated MemberInDB objects or empty list if file is empty.
@@ -45,8 +46,7 @@ class MemberRepository:
             ValueError: If YAML structure is invalid or duplicates found
             ValidationError: If Pydantic validation fails
         """
-        # Delegate all loading logic to pure function
-        return load_and_validate_yaml(self.file_path)
+        return self.loader.load_and_validate(self.file_path)
 
     def reload(self) -> None:
         """Reload all data from file and update internal state.

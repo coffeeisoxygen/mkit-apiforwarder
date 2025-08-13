@@ -10,9 +10,9 @@ Repository pattern for member data management:
 
 from pathlib import Path
 
-from src.domain.module.dta_module import load_and_validate_yaml
 from src.domain.module.sch_module import ModuleInDB
 from src.mlogg import logger
+from src.service.data_loader import GenericYamlLoader
 
 
 class ModuleRepository:
@@ -22,12 +22,14 @@ class ModuleRepository:
         """Initialize ModuleRepository with optional file path.
 
         Args:
-            file_path: Path to members.yaml file. If None, uses default data/members.yaml
+            file_path: Path to modules.yaml file. If None, uses default data/modules.yaml
         """
         if file_path is None:
             file_path = Path("data/modules.yaml")
 
         self.file_path = Path(file_path)
+
+        self.loader = GenericYamlLoader("modules", "moduleid", ModuleInDB, logger)
         self._modules: list[ModuleInDB] = []
         self._modules_dict: dict[str, ModuleInDB] = {}
 
@@ -35,7 +37,7 @@ class ModuleRepository:
         self.reload()
 
     def _load_data_from_file(self) -> list[ModuleInDB]:
-        """Load data by delegating to pure function in srv_memberdata.
+        """Load data using GenericYamlLoader.
 
         Returns:
             List of validated ModuleInDB objects or empty list if file is empty.
@@ -45,8 +47,7 @@ class ModuleRepository:
             ValueError: If YAML structure is invalid or duplicates found
             ValidationError: If Pydantic validation fails
         """
-        # Delegate all loading logic to pure function
-        return load_and_validate_yaml(self.file_path)
+        return self.loader.load_and_validate(self.file_path)
 
     def reload(self) -> None:
         """Reload all data from file and update internal state.
