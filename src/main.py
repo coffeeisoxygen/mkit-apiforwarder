@@ -2,31 +2,21 @@ import uvicorn
 from fastapi import FastAPI
 
 from src.custom import LoggingMiddleware
-from src.custom.cst_lifespan import app_lifespan
+from src.custom.cst_lifespan import app_lifespan  # lifespan pakai DataService
+from src.router import register_routes
 
 app = FastAPI(lifespan=app_lifespan)
 
+# Mask sensitive fields di logs
 app.add_middleware(LoggingMiddleware, mask_fields=["password", "token", "secret"])
 
+register_routes(app)
 
+
+# Root endpoint
 @app.get("/")
 async def root():
-    return {
-        "message": "Welcome to the Otomax API Forwarder",
-    }
-
-
-@app.get("/health")
-async def health_check():
-    member_repo = getattr(app.state, "member_repo", None)
-    member_watcher = getattr(app.state, "member_watcher", None)
-    return {
-        "status": "healthy",
-        "member_repo_type": str(type(member_repo)),
-        "member_repo_repr": str(member_repo),
-        "member_watcher_type": str(type(member_watcher)),
-        "member_watcher_repr": str(member_watcher),
-    }
+    return {"message": "Welcome to the Otomax API Forwarder"}
 
 
 if __name__ == "__main__":
