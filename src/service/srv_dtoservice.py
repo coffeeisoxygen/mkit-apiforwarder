@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import Any
 
 from src.config import get_settings
+from src.domain.digipos.rep_digipos import DigiposProductRepository
 from src.domain.member.rep_member import MemberRepository
 from src.domain.module.rep_module import ModuleRepository
 from src.mlogg import logger
@@ -9,6 +10,7 @@ from src.service.watcher.srv_watcher import FileWatcher
 
 MEMBERS_YAML = "members.yaml"
 MODULES_YAML = "modules.yaml"
+DGPRODUCTS_YAML = "digipos.yaml"
 
 
 class DataService:
@@ -30,6 +32,10 @@ class DataService:
         logger.info("MemberRepository initialized")
         self.repos["module"] = ModuleRepository(self.data_path / MODULES_YAML)
         logger.info("ModuleRepository initialized")
+        self.repos["digipos"] = DigiposProductRepository(
+            self.data_path / DGPRODUCTS_YAML
+        )
+        logger.info("DigiposProductRepository initialized")
         # Add more repositories here as needed
 
     def _init_watchers(self) -> None:
@@ -45,6 +51,13 @@ class DataService:
         )
         logger.info(
             "Module FileWatcher initialized", path=str(self.data_path / MODULES_YAML)
+        )
+        self.watchers["digipos"] = FileWatcher(
+            self.data_path / DGPRODUCTS_YAML, self.repos["digipos"].reload
+        )
+        logger.info(
+            "Digipos FileWatcher initialized",
+            path=str(self.data_path / DGPRODUCTS_YAML),
         )
         # Add more watchers here as needed
 
@@ -73,3 +86,7 @@ class DataService:
     @property
     def module_repo(self) -> ModuleRepository:
         return self.repos["module"]
+
+    @property
+    def digipos_repo(self) -> DigiposProductRepository:
+        return self.repos["digipos"]
