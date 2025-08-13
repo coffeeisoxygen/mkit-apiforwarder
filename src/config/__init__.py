@@ -12,16 +12,17 @@ DEVELOPMENT_ENV_FILE = BASE_DIR / ".env.dev"
 
 
 class Settings(BaseSettings):
-    app_env: str
-    app_debug: bool
-    app_name: str
-
     model_config = SettingsConfigDict(
         env_file=DEFAULT_ENV_FILE,
         env_file_encoding="utf-8",
         extra="ignore",
         case_sensitive=False,
     )
+
+    app_env: str
+    app_debug: bool
+    app_name: str
+    data_path: Path = BASE_DIR / "data"
 
 
 @lru_cache

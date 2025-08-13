@@ -1,15 +1,11 @@
 import uvicorn
 from fastapi import FastAPI
 
-from src.config import DEVELOPMENT_ENV_FILE, get_settings
 from src.custom import LoggingMiddleware
-from src.mlogg import init_logging
+from src.custom.cst_lifespan import app_lifespan
 
-settings = get_settings(_env_file=DEVELOPMENT_ENV_FILE)
-init_logging(settings.app_env)
+app = FastAPI(lifespan=app_lifespan)
 
-
-app = FastAPI()
 app.add_middleware(LoggingMiddleware, mask_fields=["password", "token", "secret"])
 
 
@@ -18,6 +14,19 @@ async def root():
     return {
         "message": "Hello, FastAPI entry point is running.",
         "env": settings.app_env,
+    }
+
+
+@app.get("/health")
+async def health_check():
+    member_repo = getattr(app.state, "member_repo", None)
+    member_watcher = getattr(app.state, "member_watcher", None)
+    return {
+        "status": "healthy",
+        "member_repo_type": str(type(member_repo)),
+        "member_repo_repr": str(member_repo),
+        "member_watcher_type": str(type(member_watcher)),
+        "member_watcher_repr": str(member_watcher),
     }
 
 
