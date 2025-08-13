@@ -74,6 +74,6 @@ async def digipos_trx(
         "response": {
             "status_code": resp.status_code,
             "headers": dict(resp.headers),
-            "body": resp.text,
+            "body": resp.json(),
         },
     }
