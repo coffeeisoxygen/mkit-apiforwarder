@@ -82,3 +82,18 @@ class ModuleNotFoundError(AppExceptionError):
 class ModuleInvalidCredentialsError(AppExceptionError):
     default_message = "Invalid module credentials."
     status_code = 403
+
+
+class ProductsAuthError(AppExceptionError):
+    default_message = "Products authentication failed."
+    status_code = 401
+
+
+class ProductNotFoundError(AppExceptionError):
+    default_message = "Products not found."
+    status_code = 404
+
+
+class ProductAuthError(AppExceptionError):
+    default_message = "Product authentication failed."
+    status_code = 401

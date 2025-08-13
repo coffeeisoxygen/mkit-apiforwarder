@@ -4,6 +4,7 @@ from fastapi import Depends, HTTPException, Request
 
 from src.domain.member.rep_member import MemberRepository
 from src.domain.module.rep_module import ModuleRepository
+from src.service.auth.srv_dgproductauth import DigiposProductAuthService
 from src.service.auth.srv_memberauth import MemberAuthService
 from src.service.auth.srv_moduleauth import ModuleAuthService
 from src.service.srv_dtoservice import DataService, DigiposProductRepository
@@ -46,6 +47,16 @@ def get_module_repo(
 DepModuleRepo = Annotated[ModuleRepository, Depends(get_module_repo)]
 
 
+# DigiposProduct Dependency
+def get_digipos_repo(
+    data_service: DataService = Depends(get_data_service),
+) -> DigiposProductRepository:
+    return data_service.digipos_repo
+
+
+DepDigiposRepo = Annotated[DigiposProductRepository, Depends(get_digipos_repo)]
+
+
 # -------------------------------
 # MemberAuthService Dependency
 # -------------------------------
@@ -64,11 +75,13 @@ def get_module_auth_service(module_repo: DepModuleRepo) -> ModuleAuthService:
 DepModuleAuthService = Annotated[ModuleAuthService, Depends(get_module_auth_service)]
 
 
-# DigiposProduct Dependency
-def get_digipos_repo(
-    data_service: DataService = Depends(get_data_service),
-) -> DigiposProductRepository:
-    return data_service.digipos_repo
+# ProductAuthService Dependency
+def get_digi_product_auth_service(
+    digipos_repo: DepDigiposRepo,
+) -> DigiposProductAuthService:
+    return DigiposProductAuthService(digipos_repo)
 
 
-DepDigiposRepo = Annotated[DigiposProductRepository, Depends(get_digipos_repo)]
+DepDigiProductAuthService = Annotated[
+    DigiposProductAuthService, Depends(get_digi_product_auth_service)
+]

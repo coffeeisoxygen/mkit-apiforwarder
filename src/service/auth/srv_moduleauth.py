@@ -39,7 +39,9 @@ class ModuleAuthService:
         """Ambil module dari DB + cek aktif."""
         module = self.module_manager.get_module_by_id(moduleid)
         if not module:
-            raise ModuleNotFoundError(f"Module ID '{moduleid}' not found")
+            raise ModuleNotFoundError(
+                f"Module ID '{moduleid}' not found", context={"moduleid": moduleid}
+            )
         if not module.is_active:
-            raise ModuleAuthError("Module tidak aktif")
+            raise ModuleAuthError("Module tidak aktif", context={"moduleid": moduleid})
         return module
