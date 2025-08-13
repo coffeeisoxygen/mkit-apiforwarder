@@ -79,6 +79,25 @@ class DataService:
             except Exception as e:
                 logger.error(f"Failed to stop {name} watcher", error=str(e))
 
+    def start_all(self) -> None:
+        """Start all file watchers."""
+        for name, watcher in self.watchers.items():
+            try:
+                watcher.start()
+                logger.info(f"Started watcher: {name}")
+            except Exception as e:
+                logger.error(f"Failed to start watcher: {name}", error=str(e))
+
+    def stop_all(self) -> None:
+        """Stop all file watchers."""
+        for name, watcher in self.watchers.items():
+            try:
+                watcher.stop()
+                logger.info(f"Stopped watcher: {name}")
+            except Exception as e:
+                logger.error(f"Failed to stop watcher: {name}", error=str(e))
+        logger.info("All watchers stopped")
+
     @property
     def member_repo(self) -> MemberRepository:
         return self.repos["member"]
@@ -90,3 +109,27 @@ class DataService:
     @property
     def digipos_repo(self) -> DigiposProductRepository:
         return self.repos["digipos"]
+
+    # Just For Ease Of Accsess
+    def get_repo(self, name: str) -> Any:
+        """Get repository by name (generic accessor)."""
+        return self.repos.get(name)
+
+    def reload_all(self) -> None:
+        """Reload all repositories that have a reload method."""
+        for name, repo in self.repos.items():
+            if hasattr(repo, "reload") and callable(repo.reload):
+                try:
+                    repo.reload()
+                    logger.info(
+                        f"Reloaded repository: {name} ({repo.__class__.__name__})"
+                    )
+                except Exception as e:
+                    logger.error(
+                        f"Failed to reload repository: {name} ({repo.__class__.__name__})",
+                        error=str(e),
+                    )
+            else:
+                logger.warning(
+                    f"Repository {name} ({repo.__class__.__name__}) has no reload method"
+                )
