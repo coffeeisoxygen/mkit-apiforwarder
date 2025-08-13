@@ -2,11 +2,12 @@ from pathlib import Path
 from typing import Any
 
 import yaml
-from pydantic import ValidationError
+
+from src.custom.cst_exceptions import FileLoaderError, InternalError, ValidationError
 
 
 class GenericYamlLoader:
-    def __init__(self, key_name: str, id_field: str, model: type, logger):
+    def __init__(self, key_name: str, id_field: str, model: type, logger: Any):
         self.key_name = key_name
         self.id_field = id_field
         self.model = model
@@ -33,23 +34,23 @@ class GenericYamlLoader:
                 with yaml_path.open("r", encoding="utf-8") as f:
                     data = yaml.safe_load(f)
             except yaml.YAMLError as e:
-                self.logger.error(
+                self.logger.exception(
                     "Failed to parse YAML file", error=str(e), path=str(yaml_path)
                 )
-                raise Exception("Failed to parse YAML file") from e
+                raise FileLoaderError("Failed to parse YAML file") from e
 
             if not isinstance(data, dict) or self.key_name not in data:
                 self.logger.error(
                     f"YAML must contain '{self.key_name}' key", path=str(yaml_path)
                 )
-                raise ValueError(f"YAML must contain '{self.key_name}' key")
+                raise InternalError(f"YAML must contain '{self.key_name}' key")
 
             items = data[self.key_name]
             if not isinstance(items, list):
                 self.logger.error(
                     f"'{self.key_name}' must be a list", path=str(yaml_path)
                 )
-                raise TypeError(f"'{self.key_name}' must be a list")
+                raise ValidationError(f"'{self.key_name}' must be a list")
 
             duplicates = self.check_duplicates(items)
             if duplicates:
@@ -64,7 +65,7 @@ class GenericYamlLoader:
                     validated = self.model(**item)
                     validated_items.append(validated)
                 except ValidationError as e:
-                    self.logger.error(
+                    self.logger.exception(
                         "Validation failed", index=i, item=item, error=str(e)
                     )
                     raise ValueError(f"Validation failed at index {i}: {e}") from e

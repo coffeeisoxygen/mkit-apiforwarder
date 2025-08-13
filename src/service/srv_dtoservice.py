@@ -7,6 +7,9 @@ from src.domain.module.rep_module import ModuleRepository
 from src.mlogg import logger
 from src.service.watcher.srv_watcher import FileWatcher
 
+MEMBERS_YAML = "members.yaml"
+MODULES_YAML = "modules.yaml"
+
 
 class DataService:
     """Service to manage data repositories and file watchers.
@@ -23,25 +26,25 @@ class DataService:
 
     def _init_repositories(self) -> None:
         """Initialize all repositories."""
-        self.repos["member"] = MemberRepository(self.data_path / "members.yaml")
+        self.repos["member"] = MemberRepository(self.data_path / MEMBERS_YAML)
         logger.info("MemberRepository initialized")
-        self.repos["module"] = ModuleRepository(self.data_path / "modules.yaml")
+        self.repos["module"] = ModuleRepository(self.data_path / MODULES_YAML)
         logger.info("ModuleRepository initialized")
         # Add more repositories here as needed
 
     def _init_watchers(self) -> None:
         """Initialize all file watchers."""
         self.watchers["member"] = FileWatcher(
-            self.data_path / "members.yaml", self.repos["member"].reload
+            self.data_path / MEMBERS_YAML, self.repos["member"].reload
         )
         logger.info(
-            "Member FileWatcher initialized", path=str(self.data_path / "members.yaml")
+            "Member FileWatcher initialized", path=str(self.data_path / MEMBERS_YAML)
         )
         self.watchers["module"] = FileWatcher(
-            self.data_path / "modules.yaml", self.repos["module"].reload
+            self.data_path / MODULES_YAML, self.repos["module"].reload
         )
         logger.info(
-            "Module FileWatcher initialized", path=str(self.data_path / "modules.yaml")
+            "Module FileWatcher initialized", path=str(self.data_path / MODULES_YAML)
         )
         # Add more watchers here as needed
 

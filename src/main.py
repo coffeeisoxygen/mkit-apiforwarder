@@ -19,7 +19,7 @@ register_routes(app)
 
 # Global exception handler for custom exceptions
 @app.exception_handler(AppExceptionError)
-async def app_exception_handler(request: Request, exc: AppExceptionError):
+async def app_exception_handler(request: Request, exc: AppExceptionError):  # noqa: ARG001, D103, RUF029
     logger.error(f"Application error: {exc.message}", extra=exc.context)
     return JSONResponse(
         status_code=exc.status_code,
