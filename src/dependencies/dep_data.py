@@ -4,7 +4,7 @@ from fastapi import Depends, HTTPException, Request
 
 from src.domain.member.rep_member import MemberRepository
 from src.domain.module.rep_module import ModuleRepository
-from src.service.data_service import DataService
+from src.service.srv_dtoservice import DataService
 
 
 # dependency buat ngambil data_service

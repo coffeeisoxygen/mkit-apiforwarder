@@ -12,7 +12,7 @@ from pathlib import Path
 
 from src.domain.module.sch_module import ModuleInDB
 from src.mlogg import logger
-from src.service.data_loader import GenericYamlLoader
+from src.service.srv_dtoloader import GenericYamlLoader
 
 
 class ModuleRepository:
