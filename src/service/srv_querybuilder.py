@@ -52,6 +52,8 @@ class DigiposQueryBuilder:
                 process_params(product.required_params.model_dump())
             if hasattr(product, "optional_params") and product.optional_params:
                 process_params(product.optional_params)
+            # Always add json=1 to params
+            params["json"] = 1
 
         url = f"{module.base_url}{product.api_path}" if module and product else ""
         method = getattr(product, "method", None) if product else None

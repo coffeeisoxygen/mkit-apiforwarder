@@ -1,5 +1,6 @@
 from typing import Annotated
 
+import httpx
 from fastapi import APIRouter, Depends, Query
 
 from src.dependencies.dep_data import (
@@ -43,7 +44,7 @@ def get_digipos_query_builder(
 
 
 @router.get("/digipos/trx")
-def digipos_trx(
+async def digipos_trx(
     trx_query: Annotated[DigiposTrxModel, Query()],
     product_auth_service: DepDigiProductAuthService,
     module_auth_service: DepModuleAuthService,
@@ -58,6 +59,12 @@ def digipos_trx(
         trx_query.moduleid, "digipos"
     )
     result = query_builder.build(trx_query)
+    # 3. Kirim request ke target API (async)
+    async with httpx.AsyncClient(timeout=module_obj.timeout) as client:
+        if result["method"].upper() == "GET":
+            resp = await client.get(result["url"], params=result["params"])
+        else:  # POST / PUT bisa ditambah disini
+            resp = await client.post(result["url"], json=result["params"])
     return {
         "message": "Product, module, and member are valid and active for provider digipos",
         "product": product_obj.model_dump(),
