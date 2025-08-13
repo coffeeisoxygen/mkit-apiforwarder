@@ -81,10 +81,20 @@ class StreamToLogger:
 
 # --- Init Logging ---
 def init_custom_logging():
+    """Inisialisasi logging kustom untuk aplikasi.
+
+    Mengatur konfigurasi logging menggunakan Loguru dan mengalihkan
+    output standar ke logger.
+    """
+    # Skip logging setup if running under pytest
+
     # 1. Pre-configure Loguru dari YAML
     LoguruConfig.load(str(PATHTOLOGCONFIG))
     logger.debug("✅ Loguru pre-configured from YAML")
 
+    if "pytest" in sys.modules:
+        logger.debug("We Are In Pytest")
+        return
     # 2. Intercept semua logging bawaan Python
     logging.basicConfig(handlers=[InterceptHandler()], level=0, force=True)
     logger.debug("🔄 Python logging intercepted")
