@@ -1,4 +1,5 @@
 from src.router.rtr_debug import router as member_router
+from src.router.rtr_digipos import router as digipos_router
 
 
 def register_routes(app):  # noqa: ANN001
@@ -10,3 +11,4 @@ def register_routes(app):  # noqa: ANN001
         app (FastAPI): The FastAPI application instance.
     """
     app.include_router(member_router, tags=["debug"])
+    app.include_router(digipos_router, tags=["digipos"])
