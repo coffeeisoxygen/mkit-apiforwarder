@@ -9,7 +9,7 @@ from src.custom.cst_exceptions import (
 from src.domain.member.sch_member import MemberInDB
 from src.domain.transaction.sch_transaction import TrxBaseModel
 from src.mlogg import logger
-from src.service.srv_signature import OtomaxSignatureService
+from src.service.auth.srv_signature import OtomaxSignatureService
 
 
 @runtime_checkable
