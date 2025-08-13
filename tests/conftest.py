@@ -1,22 +1,14 @@
-import sys
 from pathlib import Path
 
 import pytest
 from loguru import logger
 from src.config import Settings
+from src.utils.mlogger import init_custom_logging
 
 
 @pytest.fixture(scope="session", autouse=True)
-def configure_loguru():
-    logger.remove()  # Hapus default handler
-    logger.add(
-        sink=sys.stderr,
-        format="<level>{level}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>",
-        level="DEBUG",
-        backtrace=True,
-        diagnose=True,
-        colorize=True,
-    )
+def configure_logging():
+    init_custom_logging()
 
 
 @pytest.fixture(autouse=True)
