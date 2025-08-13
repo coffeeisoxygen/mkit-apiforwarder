@@ -61,6 +61,7 @@ class StreamToLogger:
             logger.opt(depth=1).log(self._level, line.rstrip())
 
     def flush(self):
+        """Flush method does nothing, required for compatibility."""
         pass
 
     def isatty(self):

@@ -16,6 +16,13 @@ register_routes(app)
 # Root endpoint
 @app.get("/")
 async def root():
+    """Root endpoint.
+
+    This endpoint serves as the entry point for the API.
+
+    Returns:
+        dict: A welcome message.
+    """
     return {"message": "Welcome to the Otomax API Forwarder"}
 
 

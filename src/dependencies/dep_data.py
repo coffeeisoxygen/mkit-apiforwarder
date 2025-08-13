@@ -8,6 +8,19 @@ from src.service.srv_data import DataService
 
 # dependency buat ngambil data_service
 def get_data_service(request: Request):
+    """Get the data service instance from the request.
+
+    This dependency retrieves the DataService instance from the FastAPI application state.
+
+    Args:
+        request (Request): The FastAPI request object.
+
+    Raises:
+        HTTPException: If the DataService is not ready.
+
+    Returns:
+        DataService: The DataService instance.
+    """
     ds = getattr(request.app.state, "data_service", None)
     if ds is None:
         raise HTTPException(status_code=503, detail="DataService not ready")
