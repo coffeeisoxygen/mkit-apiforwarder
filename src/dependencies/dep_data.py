@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import Depends, HTTPException, Request
 
 from src.domain.member.rep_member import MemberRepository
+from src.domain.module.rep_module import ModuleRepository
 from src.service.srv_data import DataService
 
 
@@ -60,7 +61,11 @@ def get_module_repo(data_service: DataService = Depends(get_data_service)):
     Returns:
         ModuleRepository: The module repository.
 
-
+    """
     return data_service.module_repo
 
-    """
+
+DepModuleRepo = Annotated[
+    ModuleRepository,
+    Depends(get_module_repo),
+]

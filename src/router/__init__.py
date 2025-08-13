@@ -1,4 +1,4 @@
-from src.router.rtr_member import router as member_router
+from src.router.rtr_debug import router as member_router
 
 
 def register_routes(app):  # noqa: ANN001
@@ -9,4 +9,4 @@ def register_routes(app):  # noqa: ANN001
     Args:
         app (FastAPI): The FastAPI application instance.
     """
-    app.include_router(member_router, tags=["members"])
+    app.include_router(member_router, tags=["debug"])

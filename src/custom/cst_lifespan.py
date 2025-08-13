@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 
-from mlogg import logger
+from mlogg import init_logging, logger
 from src.service.srv_data import DataService
 
 data_service = DataService()
@@ -8,6 +8,7 @@ data_service = DataService()
 
 @asynccontextmanager
 async def app_lifespan(app):  # noqa: ANN001, D103, RUF029
+    init_logging()
     try:
         data_service.start()
     except Exception as e:

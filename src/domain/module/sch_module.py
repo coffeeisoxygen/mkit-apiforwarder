@@ -21,7 +21,3 @@ class ModuleInDB(ModuleConfig):
     max_retries: int
     second_wait: int
     provider: str
-
-
-class ModuleListInDB(BaseModel):
-    __root__: list[ModuleInDB]
