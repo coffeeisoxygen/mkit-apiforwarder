@@ -8,6 +8,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 DEFAULT_ENV_FILE = BASE_DIR / ".env"
+DEVELOPMENT_ENV_FILE = BASE_DIR / ".env.dev"
 
 
 class Settings(BaseSettings):
@@ -33,7 +34,3 @@ def get_settings(_env_file: str | Path | None = None) -> Settings:
     """
     env_file = _env_file or os.getenv("ENV_FILE", DEFAULT_ENV_FILE)
     return Settings(_env_file=env_file, _env_file_encoding="utf-8")  # type: ignore
-
-
-# default instance
-settings = get_settings()
