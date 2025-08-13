@@ -9,4 +9,4 @@ def register_routes(app):  # noqa: ANN001
     Args:
         app (FastAPI): The FastAPI application instance.
     """
-    app.include_router(member_router, prefix="/members", tags=["members"])
+    app.include_router(member_router, tags=["members"])

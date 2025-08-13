@@ -13,7 +13,7 @@ async def list_members(member_repo: DepMemberRepo):
     """
     members = member_repo.get_all_members()
     # Convert semua Pydantic object ke dict
-    return [m.dict() for m in members]
+    return [m.model_dump() for m in members]
 
 
 @router.get("/members/{memberid}")
@@ -22,4 +22,4 @@ async def get_member(memberid: str, member_repo: DepMemberRepo):
     member = member_repo.get_member_by_id(memberid)
     if not member:
         return {"error": "Member not found"}
-    return member.dict()
+    return member.model_dump()
