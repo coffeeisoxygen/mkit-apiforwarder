@@ -5,8 +5,10 @@ from fastapi import APIRouter, Query
 from src.dependencies.dep_data import (
     DepDigiposRepo,
     DepDigiProductAuthService,
+    DepMemberAuthService,
     DepModuleAuthService,
 )
+from src.service.auth.srv_memberauth import MemberTrxRequestModel
 
 router = APIRouter()
 
@@ -38,14 +40,35 @@ def is_digipos_product_active(product_id: str, digipos_repo: DepDigiposRepo):
 def digipos_trx(
     product_auth_service: DepDigiProductAuthService,
     module_auth_service: DepModuleAuthService,
+    member_auth_service: DepMemberAuthService,
     productid: str = Query(..., description="Product ID"),
     moduleid: str = Query(..., description="Module ID"),
+    memberid: str = Query(..., description="Member ID"),
+    dest: str = Query(..., description="Destination"),
+    product: str = Query(..., description="Product"),
+    pin: str | None = Query(None, description="PIN"),
+    password: str | None = Query(None, description="Password"),
+    sign: str | None = Query(None, description="Signature"),
+    refid: str | None = Query(None, description="Reference ID"),
 ):
-    """Validate active Digipos product and module for provider digipos."""
-    product = product_auth_service.authenticate_and_check(productid, "digipos")
-    module = module_auth_service.authenticate_and_check_provider(moduleid, "digipos")
+    """Validate active Digipos product, module, and member for provider digipos."""
+    product_obj = product_auth_service.authenticate_and_check(productid, "digipos")
+    module_obj = module_auth_service.authenticate_and_check_provider(
+        moduleid, "digipos"
+    )
+    member_req = MemberTrxRequestModel(
+        memberid=memberid,
+        dest=dest,
+        product=product,
+        pin=pin,
+        password=password,
+        sign=sign,
+        refid=refid,
+    )
+    member_obj = member_auth_service.authenticate_and_verify(member_req)
     return {
-        "message": "Product and module are valid and active for provider digipos",
-        "product": product.model_dump(),
-        "module": module.model_dump(),
+        "message": "Product, module, and member are valid and active for provider digipos",
+        "product": product_obj.model_dump(),
+        "module": module_obj.model_dump(),
+        "member": member_obj.model_dump(),
     }
