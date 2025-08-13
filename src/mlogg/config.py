@@ -98,8 +98,7 @@ def init_logging(env: str | None = None):
     global logger
     if env is not None:
         logger = logger.patch(
-            lambda record: record["extra"].clear()
-            or record["extra"].update({"env": env})
+            lambda record: record["extra"].update({"env": env}) or None
         )
 
     logger.debug("🔄 Centralized logging initialized")

@@ -14,8 +14,6 @@ handlers:
   #   backtrace: true
   #   enqueue: true
 
-extra:
-  default: {}
 activation:
   - ["my_module.secret", false]
   - ["another_library.module", true]

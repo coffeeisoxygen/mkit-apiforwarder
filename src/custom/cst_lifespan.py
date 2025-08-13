@@ -1,8 +1,9 @@
 from contextlib import asynccontextmanager
 
-from src.mlogg import logger
+from src.mlogg import init_logging, logger
 from src.service.srv_data import DataService
 
+init_logging()
 data_service = DataService()
 
 
