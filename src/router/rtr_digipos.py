@@ -1,7 +1,7 @@
 from typing import Annotated
 
 import httpx
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, Response
 
 from src.dependencies.dep_data import (
     DepDigiposRepo,
@@ -60,24 +60,16 @@ async def digipos_trx(
         trx_query.moduleid, "digipos"
     )
     result = query_builder.build(trx_query)
-    # 3. Kirim request ke target API (async)
     async with httpx.AsyncClient(timeout=module_obj.timeout) as client:
         if result["method"].upper() == "GET":
             resp = await client.get(result["url"], params=result["params"])
-        else:  # POST / PUT bisa ditambah disini
+        else:
             resp = await client.post(result["url"], json=result["params"])
-    # Get category from query params (result["params"]) for parser
     category = result["params"].get("category")
-    parsed = None
-    if category:
-        parsed = process_category_response(category, resp.text)
-    return {
-        "message": "Product, module, and member are valid and active for provider digipos",
-        "query": result,
-        "response": {
-            "status_code": resp.status_code,
-            "headers": dict(resp.headers),
-            "body": resp.json(),
-            "parsed": parsed,
-        },
-    }
+    parsed = process_category_response(category, resp.text) if category else ""
+    trxid = result["params"].get("trxid") or result["params"].get("refid")
+    status = resp.status_code
+    body_json = resp.json()
+    to = body_json.get("to", "")
+    plain_text = f"trxid={trxid}&status={status}&to={to}&message={parsed}"
+    return Response(content=plain_text, media_type="text/plain")
