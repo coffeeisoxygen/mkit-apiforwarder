@@ -8,7 +8,7 @@ from src.custom.cst_lifespan import app_lifespan  # lifespan pakai DataService
 from src.dependencies.dep_data import DepMemberAuthService
 from src.mlogg import logger
 from src.router import register_routes
-from src.service.srv_memberauth import MemberTrxRequestModel
+from src.service.auth.srv_memberauth import MemberTrxRequestModel
 
 app = FastAPI(lifespan=app_lifespan)
 
