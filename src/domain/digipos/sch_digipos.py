@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 
 
-class RequiredParams(BaseModel):
+class DGReqParams(BaseModel):
     username: str
     to: str
     up_harga: str | int
@@ -11,7 +11,7 @@ class RequiredParams(BaseModel):
     kolom: str
 
 
-class Product(BaseModel):
+class DGProductInDB(BaseModel):
     productid: str
     name: str
     provider: str
@@ -20,10 +20,10 @@ class Product(BaseModel):
     api_path: str
     method: str
     mark_json: int = Field(alias="json")
-    required_params: RequiredParams
+    required_params: DGReqParams
     optional_params: dict[str, str | int] | None = None
     list_modules: list[str]  # moduleid saja
 
 
-class DigiposConfig(BaseModel):
-    products: list[Product]
+class DgProducList(BaseModel):
+    products: list[DGProductInDB]
