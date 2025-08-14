@@ -1,6 +1,6 @@
 import pytest
 from pydantic import ValidationError
-from src.schemas.sch_trxbase import TrxAuthFields, TrxBaseModel, TrxResponse
+from src.schemas.sch_trxbase import TrxBaseModel, TrxMemberAuthModel, TrxResponse
 
 # pyright: reportUndefinedVariable=false, reportGeneralTypeIssues=false, reportCallIssue=false
 
@@ -21,7 +21,7 @@ def test_trx_base_model_missing_required():
 
 
 def test_trx_auth_fields_optional():
-    obj = TrxAuthFields(pin="1234", password=None, sign="abc")
+    obj = TrxMemberAuthModel(pin="1234", password=None, sign="abc")
     assert obj.pin == "1234"
     assert obj.password is None
     assert obj.sign == "abc"

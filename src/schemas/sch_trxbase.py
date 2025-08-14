@@ -9,7 +9,10 @@ from pydantic import BaseModel, Field
 
 
 class TrxBaseModel(BaseModel):
-    """Field dasar transaksi (wajib di semua domain)."""
+    """Field dasar transaksi (wajib di semua domain).
+
+    agar secara konsep mengikut best practice otomax.
+    """
 
     memberid: str = Field(..., description="ID member yang akan bertransaksi")
     dest: str = Field(..., description="Tujuan transaksi")
@@ -17,8 +20,16 @@ class TrxBaseModel(BaseModel):
     trxid: str | None = Field(None, description="ID transaksi dari member")
 
 
-class TrxAuthFields(BaseModel):
-    """Field untuk otentikasi transaksi (opsional per domain)."""
+class TrxMemberAuthModel(BaseModel):
+    """Field untuk otentikasi internal.
+
+    digunakan untuk validasi request Member
+
+    jadi bukan untuk validasi username api, tetpi untuk member,
+    anggap saja ini seperti resseler validation di otomax.
+
+    transaksi yg wajib auth, wajib pake base model ini.
+    """
 
     pin: str | None = Field(None, description="PIN verifikasi transaksi")
     password: str | None = Field(None, description="Password verifikasi transaksi")

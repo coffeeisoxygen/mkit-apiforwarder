@@ -14,7 +14,7 @@ common issues:
 
 from pydantic import BaseModel, Field, field_validator
 
-from src.schemas.sch_trxbase import TrxAuthFields, TrxBaseModel
+from src.schemas.sch_trxbase import TrxBaseModel, TrxMemberAuthModel
 from src.utils.enumloader import get_enum, load_enums_from_yaml
 
 enums = load_enums_from_yaml("config/digipos/products.yaml")
@@ -22,7 +22,7 @@ PackageProductEnum = get_enum(enums, "PackageProductEnums")
 PaymentEnum = get_enum(enums, "PaymentEnums")
 
 
-class DigiposAuthModel(TrxBaseModel, TrxAuthFields):
+class DigiposAuthModel(TrxBaseModel, TrxMemberAuthModel):
     """Model untuk transaksi Digipos.
 
     moduleid adalah data module digios yg ada di yaml
