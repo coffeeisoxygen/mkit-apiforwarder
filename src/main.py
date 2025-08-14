@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse
 
 from src.custom import LoggingMiddleware
 from src.custom.cst_exceptions import AppExceptionError
-from src.custom.cst_lifespan import app_lifespan  # lifespan pakai DataService
+from src.custom.cst_lifespan import app_lifespan
 from src.mlogg import logger
 from src.router import register_routes
 
