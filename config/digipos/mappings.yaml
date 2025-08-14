@@ -1,0 +1,92 @@
+products:
+  - productid: PULSA
+    name: Pulsa
+    type: pulsa
+    provider: digipos
+    actions:
+      list:
+        api_path: /list_denom
+        method: GET
+        required_params:
+          username: modules.username
+          to: request.dest
+          amount: request.amount
+          payment_method: LINKAJA
+          up_harga: request.markup
+          trxid: request.trxid
+          json: 1
+        optional_params: {}
+      check:
+        api_path: /pulsa
+        method: GET
+        required_params:
+          username: modules.username
+          pin: modules.pin
+          to: request.dest
+          amount: request.amount
+          type: BULK
+          payment_method: LINKAJA
+          idtrx: request.trxid
+          check: 1
+        optional_params:
+          up_harga: request.markup
+      bayar:
+        api_path: /pulsa
+        method: GET
+        required_params:
+          username: modules.username
+          pin: request.pin
+          to: request.dest
+          amount: request.amount
+          type: BULK
+          payment_method: LINKAJA
+          idtrx: request.trxid
+        optional_params:
+          up_harga: request.markup
+
+  - productid: DATA
+    name: Paket Data
+    type: paketdata
+    provider: digipos
+    actions:
+      list:
+        api_path: /list_paket
+        method: GET
+        required_params:
+          username: modules.username
+          to: request.dest
+          category: DATA
+          payment_method: LINKAJA
+          kolom: productId,productSubCategory,productName,quota,duration,total_
+          up_harga: request.markup
+          trxid: request.trxid
+          json: 1
+        optional_params:
+          productSubCategory: request.subproduct
+      check:
+        api_path: /paket
+        method: GET
+        required_params:
+          username: modules.username
+          pin: modules.pin
+          to: modules.dest
+          category: DATA
+          productId: request.productid
+          payment_method: LINKAJA
+          idtrx: request.trxid
+          check: 1
+        optional_params:
+          up_harga: request.markup
+      bayar:
+        api_path: /paket
+        method: GET
+        required_params:
+          username: modules.username
+          pin: request.pin
+          to: request.dest
+          category: DATA
+          productId: request.productid
+          payment_method: LINKAJA
+          idtrx: request.trxid
+        optional_params:
+          up_harga: request.markup
