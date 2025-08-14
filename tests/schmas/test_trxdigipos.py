@@ -1,9 +1,14 @@
 import pytest
-from src.schemas.sch_trxdigipos import DigiposMarkup, DigiposTrxModel, ProductEnum
+from src.router.rtr_digipos import DigiposTrxModel
+from src.schemas.sch_trxdigipos import (
+    DigiposAuthModel,
+    DigiposMarkup,
+    PackageProductEnum,
+)
 
 
 def test_digipos_trxmodel_valid_product():
-    valid_product = list(ProductEnum._value2member_map_.keys())[0]
+    valid_product = list(PackageProductEnum._value2member_map_.keys())[0]
     data = {
         "moduleid": "mod123",
         "product": valid_product,
@@ -12,7 +17,7 @@ def test_digipos_trxmodel_valid_product():
         "username": "user1",
         "password": "pass1",
     }
-    model = DigiposTrxModel(**data)
+    model = DigiposAuthModel(**data)
     assert model.product == valid_product.upper()
 
 
@@ -30,14 +35,14 @@ def test_digipos_trxmodel_invalid_product():
 
 
 def test_digipos_trxmodel_default_markup():
-    valid_product = list(ProductEnum._value2member_map_.keys())[0]
+    valid_product = list(PackageProductEnum._value2member_map_.keys())[0]
     data = {"markup": None}
     model = DigiposMarkup(**data)
     assert model.markup == 0
 
 
 def test_digipos_trxmodel_markup_types():
-    valid_product = list(ProductEnum._value2member_map_.keys())[0]
+    valid_product = list(PackageProductEnum._value2member_map_.keys())[0]
     for markup in [None, 0, "10", 20]:
         data = {"markup": markup}
         model = DigiposMarkup(**data)

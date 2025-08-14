@@ -1,5 +1,5 @@
 enums:
-  ProductEnums:
+  PackageProductEnums:
     DATA: "DATA"
     VOICE_SMS: "VOICE_SMS"
     DIGITAL_OTHER: "DIGITAL_OTHER"
