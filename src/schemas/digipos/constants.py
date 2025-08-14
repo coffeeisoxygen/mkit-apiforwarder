@@ -1,67 +1,68 @@
 # ruff : noqa T201
+
 from enum import Enum, StrEnum
 from pathlib import Path
-
+from typing import Any, Dict, List
 import yaml
 
-# Load products dari YAML
-config_path = Path().resolve().parent.parent.parent / "config/digipos/products.yaml"
-with open(config_path, encoding="utf-8") as f:
-    data = yaml.safe_load(f)
 
-products_list = data["products"]
+def load_products_yaml(path: Path) -> List[Dict[str, Any]]:
+    """Load products from a YAML file."""
+    try:
+        with open(path, encoding="utf-8") as f:
+            data = yaml.safe_load(f)
+        return data["products"]
+    except Exception as e:
+        raise RuntimeError(f"Failed to load products YAML: {e}")
+
+
+def create_enum(enum_name: str, items: List[str]) -> Enum:
+    """Create an Enum from a list of strings."""
+    return Enum(enum_name, {item: item for item in items})
+
+
+def create_enum_by_type(
+    enum_name: str, products: List[Dict[str, Any]], prod_type: str
+) -> Enum:
+    """Create an Enum for products of a specific type."""
+    items = [p["product"] for p in products if p["type"] == prod_type]
+    return create_enum(enum_name, items)
+
+
+def create_payment_enum(enum_name: str, products: List[Dict[str, Any]]) -> Enum:
+    """Create an Enum for payment methods in products."""
+    payment_methods = {
+        p["payment_method"]
+        for p in products
+        if "payment_method" in p and p["payment_method"]
+    }
+    return create_enum(enum_name, list(payment_methods))
+
+
+# Load products dari YAML
+config_path = (
+    Path(__file__).resolve().parent.parent.parent / "config/digipos/products.yaml"
+)
+products_list = load_products_yaml(config_path)
 
 
 class ProductTypeEnum(StrEnum):
+    """Product type enumeration."""
+
     paketdata = "paketdata"
     pulsa = "pulsa"
     voucher = "voucher"
 
 
 # ProductEnum (all products)
-ProductEnum = Enum("ProductEnum", {p["product"]: p["product"] for p in products_list})
+ProductEnum = create_enum("ProductEnum", [p["product"] for p in products_list])
 # PaketDataEnum
-PaketDataEnum = Enum(
-    "PaketDataEnum",
-    {
-        p["product"]: p["product"]
-        for p in products_list
-        if p["type"] == ProductTypeEnum.paketdata
-    },
+PaketDataEnum = create_enum_by_type(
+    "PaketDataEnum", products_list, ProductTypeEnum.paketdata
 )
-# Pulsa Enums
-PulsaEnum = Enum(
-    "PulsaEnum",
-    {
-        p["product"]: p["product"]
-        for p in products_list
-        if p["type"] == ProductTypeEnum.pulsa
-    },
-)
-
-# Voucher Enums
-VoucherEnum = Enum(
-    "VoucherEnum",
-    {
-        p["product"]: p["product"]
-        for p in products_list
-        if p["type"] == ProductTypeEnum.voucher
-    },
-)
-
-# 3. PaymentEnum (all payment_method dari products, skip None)
-payment_methods = {p["payment_method"] for p in products_list if "payment_method" in p}
-PaymentEnum = Enum("PaymentEnum", {pm: pm for pm in payment_methods})
-
-
-def main():
-    # Usage example
-    print(list(ProductTypeEnum))
-    print(list(PaketDataEnum.__members__.values()))
-    print(list(PulsaEnum))
-    print(list(VoucherEnum))
-    print(list(PaymentEnum))
-
-
-if __name__ == "__main__":
-    main()
+# PulsaEnum
+PulsaEnum = create_enum_by_type("PulsaEnum", products_list, ProductTypeEnum.pulsa)
+# VoucherEnum
+VoucherEnum = create_enum_by_type("VoucherEnum", products_list, ProductTypeEnum.voucher)
+# PaymentEnum
+PaymentEnum = create_payment_enum("PaymentEnum", products_list)
