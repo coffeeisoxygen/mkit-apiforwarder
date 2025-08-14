@@ -25,7 +25,7 @@ class TrxMemberAuthModel(BaseModel):
 
     digunakan untuk validasi request Member
 
-    jadi bukan untuk validasi username api, tetpi untuk member,
+    jadi bukan untuk validasi username api, tetapi untuk member,
     anggap saja ini seperti resseler validation di otomax.
 
     transaksi yg wajib auth, wajib pake base model ini.
@@ -34,6 +34,15 @@ class TrxMemberAuthModel(BaseModel):
     pin: str | None = Field(None, description="PIN verifikasi transaksi")
     password: str | None = Field(None, description="Password verifikasi transaksi")
     sign: str | None = Field(None, description="Signature verifikasi transaksi")
+
+
+class TrxWithMemberAuth(TrxBaseModel, TrxMemberAuthModel):
+    """Model untuk transaksi yang memerlukan otentikasi member.
+
+    ini biar ngga repot aja sih import dua model kemana mana
+    """
+
+    pass
 
 
 class TrxResponse(BaseModel):
