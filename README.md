@@ -1,3 +1,6 @@
+[![Python](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.116.1+-green.svg)](https://fastapi.tiangolo.com/)
+
 # MODKIT API PARSER
 
 ## cara kerja API
@@ -24,6 +27,12 @@ sequenceDiagram
     API-->>Client: Return Plain Text Response
 ```
 
-## Penjelasan
+## Tech Stack
 
-1- ketika client menerima request GET : maka akan di verifikasi
+- UV : Ultra Fast Python Product manager from astral.
+- Python => 3.12
+- fastapi>=0.116.1",
+- loguru>=0.7.3",
+- loguru-config>=0.1.0",
+- markdown>=3.8.2",
+- watchdog>=6.0.0",
