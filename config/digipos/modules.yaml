@@ -1,0 +1,14 @@
+modules:
+  - moduleid: XXXXX
+    name: XXXX
+    username: XXXXXX
+    msisdn: XXXXXX
+    pin: XXXXXX
+    password: XXXXXX
+    email: XXXXXX
+    is_active: true
+    base_url: http://10.0.0.3:10003
+    timeout: 5
+    max_retries: 3
+    second_wait: 2
+    provider: digipos
