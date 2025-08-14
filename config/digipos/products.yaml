@@ -1,18 +1,40 @@
-enums:
-  PackageProductEnums:
-    DATA: "DATA"
-    VOICE_SMS: "VOICE_SMS"
-    DIGITAL_OTHER: "DIGITAL_OTHER"
-    DIGITAL_MUSIC: "DIGITAL_MUSIC"
-    DIGITAL_GAME: "DIGITAL_GAME"
-    ROAMING: "ROAMING"
-    VF: "VF"
-    BYU: "BYU"
-    HVC_DATA: "HVC_DATA"
-    HVC_VOICE_SMS: "HVC_VOICE_SMS"
-  PulsaProductEnums:
-    FIX: "FIX"
-    BULK: "BULK"
-  PaymentEnums:
-    LINKAJA: "LINKAJA"
-    NGRS: "NGRS"
+products:
+  - product: DATA
+    name: Check Eligible Paket Digipos
+    type: paketdata
+  - product: VOICE_SMS
+    name: Check Eligible Paket SMS
+    type: paketdata
+  - product: DIGITAL_OTHER
+    name: Check Eligible Paket Digital Other
+    type: paketdata
+  - product: DIGITAL_MUSIC
+    name: Check Eligible Paket Digital Music
+    type: paketdata
+  - product: DIGITAL_GAME
+    name: Check Eligible Paket Digital Game
+    type: paketdata
+  - product: ROAMING
+    name: Check Eligible Paket Roaming
+    type: paketdata
+    payment_method: LINKAJA
+  - product: BYU
+    name: Check Eligible Paket BYU
+    type: paketdata
+  - product: HVC_DATA
+    name: Check Eligible Paket HVC Data
+    type: paketdata
+  - product: HVC_VOICE_SMS
+    name: Check Eligible Paket HVC Voice SMS
+    type: paketdata
+  - product: FIX
+    name: Pulsa Tipe FIX
+    type: pulsa
+    payment_method: NGRS
+  - product: BULK
+    name: Pulsa Tipe BULK
+    type: pulsa
+    payment_method: LINKAJA
+  - product: VF
+    name: Check Eligible Paket VF
+    type: voucher

@@ -1,6 +1,6 @@
 """Core Schemas untuk Transaksi.
 
-Dipakai semua domain, bisa di-extend sesuai kebutuhan masing-masing.
+Dipakai semua domain digipos, isimple, sidompul dan lain lain.
 """
 
 from typing import Self

@@ -1,0 +1,104 @@
+# Digipos API parameter configuration.
+# This file defines the mapping of API endpoints, required and optional parameters,
+# and runtime overrides for paketdata, pulsa, and voucher product types.
+
+paketdata:
+  # Paket data related API endpoints and parameters.
+  list_paket:
+    # Endpoint for listing available paket data.
+    api_path: /list_paket
+    required_params:
+      # Required parameters for the list_paket API.
+      username: modules.username
+      to: request.dest
+      up_harga: request.markup
+      trxid: request.trxid
+      category: products.product # Overridden at runtime from product
+      payment_method: product.payment_method # Overridden at runtime from product
+    kolom:
+      # Columns returned by the list_paket API.
+      - productId
+      - productSubCategory
+      - productName
+      - quota
+      - duration
+      - total_
+    optional_params:
+      # Optional parameters for the list_paket API.
+      productSubCategory: request.subproduct
+      duration: request.duration # Overridden at runtime from duration
+
+  #==============================================================
+  # API for buying or checking paket data.
+  buy_paket:
+    # Endpoint for buying/checking paket data.
+    api_path: /paket
+    required_params:
+      # Required parameters for the buy_paket API.
+      username: modules.username
+      pin: modules.pin
+      category: products.product # Overridden at runtime from product
+      payment_method: product.payment_method # Overridden at runtime from product
+      to: request.dest
+      productId: request.productid
+      trxid: request.trxid
+      check: request.check # 1 or 0
+
+# Pulsa product type API configuration.
+pulsa:
+  list_denom:
+    # Endpoint for listing available pulsa denominations.
+    api_path: /list_denom
+    required_params:
+      # Required parameters for the list_denom API.
+      username: modules.username
+      to: request.dest
+      amount: request.amount
+      payment_method: product.payment_method # Overridden at runtime from product
+      up_harga: request.markup
+      trxid: request.trxid
+
+  buy_denom:
+    # Endpoint for buying pulsa denomination.
+    api_path: /pulsa
+    required_params:
+      # Required parameters for the buy_denom API.
+      username: modules.username
+      pin: modules.pin
+      to: request.dest
+      amount: request.amount
+      payment_method: product.payment_method # Overridden at runtime from product
+      trxid: request.trxid
+      type: request.type # Overridden at runtime
+
+# Voucher product type API configuration.
+voucher:
+  list_voucher:
+    # Endpoint for listing available vouchers.
+    api_path: /list_product
+    required_params:
+      # Required parameters for the list_voucher API.
+      username: modules.username
+      to: request.dest
+      payment_method: product.payment_method # Overridden at runtime from product
+      category: products.product # Only VF is overridden at load time
+
+  status_voucher_fisik:
+    # Endpoint for checking physical voucher status.
+    api_path: /status_voucher_fisik
+    required_params:
+      # Required parameters for the status_voucher_fisik API.
+      username: modules.username
+      to: request.dest
+
+  trx_voucher:
+    # Endpoint for voucher transaction.
+    api_path: /voucher
+    required_params:
+      # Required parameters for the trx_voucher API.
+      username: modules.username
+      pin: modules.pin
+      payment_method: product.payment_method # Overridden at runtime from product
+      to: request.dest
+      productId: request.productid # Overridden at runtime from productid
+      trxid: request.trxid # Overridden at runtime from trxid
