@@ -10,6 +10,9 @@ enums:
     BYU: "BYU"
     HVC_DATA: "HVC_DATA"
     HVC_VOICE_SMS: "HVC_VOICE_SMS"
+  PulsaProductEnums:
+    FIX: "FIX"
+    BULK: "BULK"
   PaymentEnums:
     LINKAJA: "LINKAJA"
     NGRS: "NGRS"
