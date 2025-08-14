@@ -28,3 +28,15 @@ class DigiposTrxModel(TrxBaseModel, TrxAuthFields):
         if value_upper not in ProductEnum._value2member_map_:
             raise ValueError(f"Invalid product: {value}")
         return value_upper
+
+    @field_validator("markup", mode="before")
+    @classmethod
+    def validate_markup(cls, value: str | int | None) -> int:
+        if value is None:
+            return 0
+        if isinstance(value, str):
+            try:
+                return int(value)
+            except ValueError:
+                return 0
+        return value
