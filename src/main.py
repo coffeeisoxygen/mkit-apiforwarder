@@ -6,13 +6,15 @@ from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse
 
 from src.custom import LoggingMiddleware
+from src.custom.cst_cors import setup_cors
 from src.custom.cst_exceptions import AppExceptionError
 from src.custom.cst_lifespan import app_lifespan
 from src.mlogg import logger
 from src.router import register_routes
 
 app = FastAPI(lifespan=app_lifespan)
-
+# cors
+setup_cors(app)
 # Mask sensitive fields di logs
 app.add_middleware(LoggingMiddleware, mask_fields=["password", "token", "secret"])
 
