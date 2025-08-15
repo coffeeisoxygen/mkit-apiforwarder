@@ -18,15 +18,18 @@ from pydantic import BaseModel, Field, field_validator
 from src.schemas.sch_trxbase import TrxWithMemberAuth
 
 
-class DigiposFilterOptionalParams(BaseModel):
+class DigiposOptionalFilterParams(BaseModel):
     subproduct: str | None = Field(
+        default="",
         description="Sub-category of the product, biasa nya subproduct hanya alphabet",
         pattern=r"^[A-Za-z]+$",
     )
-    duration: int | None = Field(description="Duration for the product, if applicable.")
+    duration: int | None = Field(
+        default=0, description="Duration for the product, if applicable."
+    )
 
 
-class DigiposOpsionalParamsMarkup(BaseModel):
+class DigiposOptionalMarkupParams(BaseModel):
     markup: int = Field(
         default=0,
         description="Markup nominal for the product, if applicable.",
@@ -44,7 +47,7 @@ class DigiposOpsionalParamsMarkup(BaseModel):
 
 
 class DigiposReqListPaketData(
-    TrxWithMemberAuth, DigiposFilterOptionalParams, DigiposOpsionalParamsMarkup
+    TrxWithMemberAuth, DigiposOptionalFilterParams, DigiposOptionalMarkupParams
 ):
     """Request model for Digipos Paket Data transactions.
 
@@ -56,7 +59,7 @@ class DigiposReqListPaketData(
     pass
 
 
-class DigiposReqCheckBuyPaket(TrxWithMemberAuth, DigiposOpsionalParamsMarkup):
+class DigiposReqCheckBuyPaket(TrxWithMemberAuth, DigiposOptionalMarkupParams):
     """Request model for Digipos Paket Data purchase transactions.
 
     untuk melakukan pembelian Paket untuk nomor tersebut.
