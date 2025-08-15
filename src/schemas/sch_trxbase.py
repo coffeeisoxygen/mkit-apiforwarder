@@ -36,7 +36,7 @@ class TrxMemberAuthModel(BaseModel):
     sign: str | None = Field(None, description="Signature verifikasi transaksi")
 
 
-class TrxWithMemberAuth(TrxBaseModel, TrxMemberAuthModel):
+class TrxWithMemberAuth(TrxMemberAuthModel, TrxBaseModel):
     """Model untuk transaksi yang memerlukan otentikasi member.
 
     ini biar ngga repot aja sih import dua model kemana mana
