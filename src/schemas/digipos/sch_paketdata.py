@@ -13,43 +13,76 @@ NOTE: [trxid] dan [up_harga] bersifat opsional
 
 """
 
-from pydantic import field_validator
-from sch_trxbase import TrxWithMemberAuth
+from pydantic import BaseModel, Field, field_validator
 
-from src.schemas.digipos.constants import PaketDataEnum
+from src.schemas.sch_trxbase import TrxWithMemberAuth
 
 
-class DigiposReqBase(TrxWithMemberAuth):
-    """Base class for Digipos requests.
+class DigiposFilterOptionalParams(BaseModel):
+    subproduct: str | None = Field(
+        description="Sub-category of the product, biasa nya subproduct hanya alphabet",
+        pattern=r"^[A-Za-z]+$",
+    )
+    duration: int | None = Field(description="Duration for the product, if applicable.")
 
-    validator dsini overide product di base class TrxWithMemberAuth
-    """
 
-    @field_validator("category", mode="before")
+class DigiposOpsionalParamsMarkup(BaseModel):
+    markup: int = Field(
+        default=0,
+        description="Markup nominal for the product, if applicable.",
+    )
+
+    @field_validator("markup")
     @classmethod
-    def validate_category(cls, value: str) -> str:
-        """Validate the category field.
+    def validate_markup(cls, v: int) -> int:
+        # Accept any integer, including negative values
+        if not isinstance(v, int):
+            raise TypeError("markup must be an integer")
+        return v
 
-        This validator checks if the provided category is valid according to the
-        PaketDataEnum.
-
-        Args:
-            value (str): The category to validate.
-
-        Raises:
-            ValueError: If the category is invalid.
-
-        Returns:
-            str: The validated category.
-        """
-        value_upper = value.upper()
-        if value_upper not in PaketDataEnum._value2member_map_:
-            raise ValueError(f"Invalid category: {value}")
-        return value_upper
+    # TODO : Add Params Lain Seperti Up harga Min Harga Max harga dan lain lain.
 
 
-class DigiposReqListPaketData(DigiposReqBase):
+class DigiposReqListPaketData(
+    TrxWithMemberAuth, DigiposFilterOptionalParams, DigiposOpsionalParamsMarkup
+):
     """Request model for Digipos Paket Data transactions.
 
     untuk melakukan pengecekan Elligible Paket untuk nomor tersebut.
+    ini hanya parameters opsional
+    validasi product akan di lakukan di level service
     """
+
+    pass
+
+
+class DigiposReqCheckBuyPaket(TrxWithMemberAuth, DigiposOpsionalParamsMarkup):
+    """Request model for Digipos Paket Data purchase transactions.
+
+    untuk melakukan pembelian Paket untuk nomor tersebut.
+    ini hanya parameters opsional
+    validasi product akan di lakukan di level service
+    """
+
+    productid: str = Field(
+        description="ID product yg di dapatkan dari list Paket, biasa nya hanya angka",
+        pattern=r"^[0-9]+$",
+    )
+    check: bool = Field(
+        default=True,
+        description=(
+            "Jika ingin melakukan pengecekan ulang harga setelah list, gunakan check=1. "
+            "Jika sudah yakin, tidak perlu kirim check atau gunakan check=0. "
+            "Nilai 1/True akan melakukan pengecekan harga, nilai 0/False akan melewati pengecekan."
+        ),
+    )
+
+    @field_validator("check", mode="before")
+    @classmethod
+    def validate_check(cls, v: int | str | bool) -> bool:
+        """Accepts 1/0, True/False, '1'/'0' and converts to boolean."""
+        if v in (1, "1", True):
+            return True
+        if v in (0, "0", False):
+            return False
+        raise ValueError("check must be 1, 0, True, or False")
