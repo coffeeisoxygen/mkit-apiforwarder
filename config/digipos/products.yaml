@@ -1,40 +1,67 @@
 products:
+  # ======================================================#
+  #                           Paket Data                  #
+  # ======================================================#
   - product: DATA
     name: Check Eligible Paket Digipos
     type: paketdata
+    payment_method: LINKAJA
+
   - product: VOICE_SMS
     name: Check Eligible Paket SMS
     type: paketdata
+    payment_method: LINKAJA
+
   - product: DIGITAL_OTHER
     name: Check Eligible Paket Digital Other
     type: paketdata
+    payment_method: LINKAJA
+
   - product: DIGITAL_MUSIC
     name: Check Eligible Paket Digital Music
     type: paketdata
+    payment_method: LINKAJA
+
   - product: DIGITAL_GAME
     name: Check Eligible Paket Digital Game
     type: paketdata
+    payment_method: LINKAJA
+
   - product: ROAMING
     name: Check Eligible Paket Roaming
     type: paketdata
     payment_method: LINKAJA
+
   - product: BYU
     name: Check Eligible Paket BYU
     type: paketdata
+    payment_method: LINKAJA
+
   - product: HVC_DATA
     name: Check Eligible Paket HVC Data
     type: paketdata
+    payment_method: LINKAJA
+
   - product: HVC_VOICE_SMS
     name: Check Eligible Paket HVC Voice SMS
     type: paketdata
+    payment_method: LINKAJA
+  # ======================================================#
+  #                           Pulsa Only                  #
+  # ======================================================#
   - product: FIX
     name: Pulsa Tipe FIX
     type: pulsa
     payment_method: NGRS
+
   - product: BULK
     name: Pulsa Tipe BULK
     type: pulsa
     payment_method: LINKAJA
+  # ======================================================#
+  #                           Voucher Only                #
+  # ======================================================#
   - product: VF
     name: Check Eligible Paket VF
     type: voucher
+    payment_method: NGRS
